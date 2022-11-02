@@ -1,4 +1,9 @@
 import React from 'react';
+<<<<<<< HEAD
+=======
+import logo from './logo.svg';
+// import './App.css';
+>>>>>>> 9cf163010d4660499d86b29503870303d0e3fe00
 
 function CompanionHousing() {
   return (
