@@ -1,24 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './Navbar';
+import CompanionHousing from './CompanionHousing';
+import ResourcesLink from './ResourcesLink';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex items-stretch h-screen">
+        <div className="border-solid flex-auto pl-[2.5%] pt-[2.5%] w-3/12 ">
+            <Navbar />
+        </div>
+        <div className="border-solid flex-auto w-6/12">
+            <CompanionHousing />
+        </div>
+        <div className="border-solid flex-auto pb-[2.5%] pr-[2.5%] w-3/12">
+            <ResourcesLink />
+        </div>
     </div>
   );
 }
