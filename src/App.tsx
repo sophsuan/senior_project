@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import CompanionHousing from "./components/CompanionHousing";
 import ResourcesLink from "./components/ResourcesLink";
+import Textbox from "./components/Textbox";
 
 function App() {
   return (
