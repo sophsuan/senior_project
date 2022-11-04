@@ -10,7 +10,10 @@ module.exports = {
     colors: {
         'main-bg': '#DF7E74',
         'secondary-bg': '#F9AE91',
-        'white': colors.white
+        'white': colors.white,
+        'black': colors.black,
+        'red': colors.red,
+        'blue': colors.blue
     },
   },
   plugins: [],
