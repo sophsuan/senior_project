@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import CompanionHousing from "./components/CompanionHousing";
 import ResourcesLink from "./components/ResourcesLink";
+import Textbox from "./components/Textbox";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <div className="border-solid flex-auto pl-[2.5%] pt-[2.5%] w-3/12 ">
         <Navbar />
       </div>
-      <div className="border-solid flex-auto w-6/12">
+      <div className="border-solid flex-auto w-1/2 h-full m-20">
         <CompanionHousing />
       </div>
       <div className="border-solid flex-auto pb-[2.5%] pr-[2.5%] w-3/12">

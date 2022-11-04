@@ -10,6 +10,7 @@ module.exports = {
     colors: {
         'main-bg': '#DF7E74',
         'secondary-bg': '#F9AE91',
+        'btn-yellow': 'FBF7BF',
         'white': colors.white
     },
   },
