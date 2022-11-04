@@ -13,7 +13,8 @@ module.exports = {
         'white': colors.white,
         'black': colors.black,
         'red': colors.red,
-        'blue': colors.blue
+        'blue': colors.blue,
+        'btn-yellow': 'FBF7BF'
     },
   },
   plugins: [],
