@@ -8,12 +8,12 @@ import HeartIcon from "../heart icon.png";
 
 function CompanionHousing() {
   return (
-    <div className="aspect-[10/9] rounded-full bg-secondary-bg flex flex-col justify-center items-center p-20">
-      <div className="aspect-square box-content h-2/3 w-4/5 rounded-xl bg-white flex flex-col mb-10 mt-10 pb-2 shadow-inner">
+    <div className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center">
+      <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner">
         {/* inside the screen*/}
         {/* <div className="grid place-items-center">♡ ▮▮▮▮▯▯▯▯▯▯</div> */}
         <ProgressBar progress="w-[50%]" level={1} />
-        <div className="flex justify-center mr-3 mt-3">
+        <div className="flex justify-center m-6">
           {" "}
           <img
             src={FullDino}
@@ -28,7 +28,7 @@ function CompanionHousing() {
           />
         </div>
       </div>
-      <div className="flex flex-row w-3/4 justify-between pb-5">
+      <div className="hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4">
         {/* the buttons */}
         <div className="aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg">
           <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
