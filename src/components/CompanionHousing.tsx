@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ProgressBar from './ProgressBar';
 import Textbox from "./Textbox";
 import FullDino from "../full_dino_placeholder.png";
 import UpIcon from "../up icon.png";
@@ -10,7 +11,8 @@ function CompanionHousing() {
     <div className="aspect-[10/9] rounded-full bg-secondary-bg flex flex-col justify-center items-center p-20">
       <div className="aspect-square box-content h-2/3 w-4/5 rounded-xl bg-white flex flex-col mb-10 mt-10 pb-2 shadow-inner">
         {/* inside the screen*/}
-        <div className="grid place-items-center">♡ ▮▮▮▮▯▯▯▯▯▯</div>
+        {/* <div className="grid place-items-center">♡ ▮▮▮▮▯▯▯▯▯▯</div> */}
+        <ProgressBar progress="w-[50%]" level={1} />
         <div className="flex justify-center mr-3 mt-3">
           {" "}
           <img

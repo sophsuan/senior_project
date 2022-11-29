@@ -10,8 +10,11 @@ module.exports = {
     colors: {
         'main-bg': '#DF7E74',
         'secondary-bg': '#F9AE91',
-        'btn-yellow': 'FBF7BF',
-        'white': colors.white
+        'white': colors.white,
+        'black': colors.black,
+        'red': colors.red,
+        'blue': colors.blue,
+        'btn-yellow': 'FBF7BF'
     },
   },
   plugins: [],
