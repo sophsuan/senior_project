@@ -1,30 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProgressBar from './ProgressBar';
+import Dino from './Dino';
 import Textbox from "./Textbox";
-import FullDino from "../full_dino_placeholder.png";
 import UpIcon from "../up icon.png";
 import DownIcon from "../down icon.png";
 import HeartIcon from "../heart icon.png";
 
 function CompanionHousing() {
+  const [promptAsked, setPromptAsked] = useState(true);
+  console.log(promptAsked);
+
   return (
     <div className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center">
-      <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner">
+      <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        {/* <div className="grid place-items-center">♡ ▮▮▮▮▯▯▯▯▯▯</div> */}
-        <ProgressBar progress="w-[50%]" level={1} />
-        <div className="flex justify-center m-6">
-          {" "}
-          <img
-            src={FullDino}
-            alt="dino pic"
-            className="object-contain h-40 w-40 pt-1 pl-1 pr-1"
-          />
-        </div>
+        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked}/>
+        <Dino promptAsked={promptAsked} />
         <div className="p-5">
           <Textbox
-            prompt="dino: how are you feeling today? :)"
-            choices={["good!", "okay", "not great."]}
+            prompt={promptAsked ? "dino: can you tell me about something you liked about today?" : "dino: how are you doing today? :)"}
+            choices={promptAsked ? [] : ["good!", "okay", "not great."]}
+            promptAsked={promptAsked}
           />
         </div>
       </div>
