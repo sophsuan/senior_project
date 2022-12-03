@@ -1,34 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProgressBar from './ProgressBar';
+import Dino from './Dino';
 import Textbox from "./Textbox";
-import FullDino from "../full_dino_placeholder.png";
 import UpIcon from "../up icon.png";
 import DownIcon from "../down icon.png";
 import HeartIcon from "../heart icon.png";
 
 function CompanionHousing() {
+  const [promptAsked, setPromptAsked] = useState(true);
+  console.log(promptAsked);
+
   return (
-    <div className="aspect-[10/9] rounded-full bg-secondary-bg flex flex-col justify-center items-center p-20">
-      <div className="aspect-square box-content h-2/3 w-4/5 rounded-xl bg-white flex flex-col mb-10 mt-10 pb-2 shadow-inner">
+    <div className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center">
+      <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        {/* <div className="grid place-items-center">♡ ▮▮▮▮▯▯▯▯▯▯</div> */}
-        <ProgressBar progress="w-[50%]" level={1} />
-        <div className="flex justify-center mr-3 mt-3">
-          {" "}
-          <img
-            src={FullDino}
-            alt="dino pic"
-            className="object-contain h-40 w-40 pt-1 pl-1 pr-1"
-          />
-        </div>
+        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked}/>
+        <Dino promptAsked={promptAsked} />
         <div className="p-5">
           <Textbox
-            prompt="dino: how are you feeling today? :)"
-            choices={["good!", "okay", "not great."]}
+            prompt={promptAsked ? "dino: can you tell me about something you liked about today?" : "dino: how are you doing today? :)"}
+            choices={promptAsked ? [] : ["good!", "okay", "not great."]}
+            promptAsked={promptAsked}
           />
         </div>
       </div>
-      <div className="flex flex-row w-3/4 justify-between pb-5">
+      <div className="hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4">
         {/* the buttons */}
         <div className="aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg">
           <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
