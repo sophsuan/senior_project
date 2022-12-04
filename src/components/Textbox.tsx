@@ -1,34 +1,46 @@
+import { STATES } from "mongoose";
 import React, { useState } from "react";
 import DinoPfp from "../dino_pfp_placeholder.png";
 
 interface TextboxProps {
   prompt: string;
+  selected: number;
   choices: string[];
-  promptAsked : boolean;
+  promptAsked: boolean;
 }
 
-function Input({ promptAsked } : { promptAsked : boolean }) {
+function Input({ promptAsked }: { promptAsked: boolean }) {
   if (promptAsked) {
     return (
-      <textarea rows={11} placeholder="type response here" className="p-2.5 text-base rounded-lg text-inherit resize-none"></textarea>
+      <textarea
+        rows={11}
+        placeholder="type response here"
+        className="p-2.5 text-base rounded-lg text-inherit resize-none"
+      ></textarea>
     );
   }
   return null;
 }
 
-function LogNav({ promptAsked } : { promptAsked: boolean }) {
+function LogNav({ promptAsked }: { promptAsked: boolean }) {
   if (promptAsked) {
     return (
       <div className="grid grid-cols-3 gap-10 items-center">
-        <button className="border-4 border-main-bg hover:border-4 hover:border-white hover:cursor-pointer hover:rounded-lg rounded-3xl font-bold text-white text-base p-2 text-inherit">back</button>
-        <p className="font-bold text-white text-base text-inherit">{(new Date()).toLocaleString().split(",")[0]}</p>
-    </div>
-    )
+        <button className="border-4 border-main-bg hover:border-4 hover:border-white hover:cursor-pointer hover:rounded-lg rounded-3xl font-bold text-white text-base p-2 text-inherit">
+          prompt back
+        </button>
+        <p className="font-bold text-white text-base text-inherit">
+          {new Date().toLocaleString().split(",")[0]}
+        </p>
+      </div>
+    );
   }
   return null;
 }
 
 function Textbox(props: TextboxProps) {
+  //  const [selectedID, setSelectedID] = useState(0);
+
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">
@@ -42,11 +54,23 @@ function Textbox(props: TextboxProps) {
               {props.prompt}
             </p>
             <ul>
-              {props.choices.map((choice) => (
-                <li className="flex items-start font-bold	text-white text-base pl-10 pb-1 text-inherit">
-                  {choice}
-                </li>
-              ))}
+              {props.choices.map((choice, i) =>
+                props.selected === i ? (
+                  <li
+                    key={choice}
+                    className="flex items-start font-bold	text-white text-base pl-5 pb-1 text-inherit"
+                  >
+                    ▶ {choice}
+                  </li>
+                ) : (
+                  <li
+                    key={choice}
+                    className="flex items-start font-bold	text-white text-base pl-10 pb-1 text-inherit"
+                  >
+                    {choice}
+                  </li>
+                )
+              )}
             </ul>
           </div>
         </div>

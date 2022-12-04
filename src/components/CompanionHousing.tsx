@@ -1,25 +1,48 @@
-import React, { useState } from 'react';
-import ProgressBar from './ProgressBar';
-import Dino from './Dino';
+import React, { useState, KeyboardEvent } from "react";
+import ProgressBar from "./ProgressBar";
+import Dino from "./Dino";
 import Textbox from "./Textbox";
 import UpIcon from "../up icon.png";
 import DownIcon from "../down icon.png";
 import HeartIcon from "../heart icon.png";
 
 function CompanionHousing() {
-  const [promptAsked, setPromptAsked] = useState(true);
+  const [promptAsked, setPromptAsked] = useState(false);
+  const [selectedID, setSelectedID] = useState(0);
+
   console.log(promptAsked);
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log(event.code);
+    if (event.code === "KeyA") {
+      setSelectedID((id) => Math.max(0, id - 1));
+    }
+    if (event.code === "KeyD") {
+      setSelectedID((id) => Math.min(2, id + 1));
+    }
+    if (event.code === "KeyS") {
+      // try catch for adding new mood
+    }
+  };
   return (
-    <div className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center">
+    <div
+      className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center"
+      tabIndex={0}
+      onKeyDown={keyDownHandler}
+    >
       <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked}/>
+        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked} />
         <Dino promptAsked={promptAsked} />
         <div className="p-5">
           <Textbox
-            prompt={promptAsked ? "dino: can you tell me about something you liked about today?" : "dino: how are you doing today? :)"}
+            prompt={
+              promptAsked
+                ? "dino: can you tell me about something you liked about today?"
+                : "dino: how are you doing today? :)"
+            }
             choices={promptAsked ? [] : ["good!", "okay", "not great."]}
+            selected={selectedID}
             promptAsked={promptAsked}
           />
         </div>
