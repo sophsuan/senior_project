@@ -6,22 +6,44 @@ import UpIcon from "../up icon.png";
 import DownIcon from "../down icon.png";
 import HeartIcon from "../heart icon.png";
 
+function switchResponse(param: number): string {
+  switch (param) {
+    case 0:
+      return "dino: glad to hear it!";
+    case 1:
+      return "dino: yeah, me too honestly.";
+    case 2:
+      return "dino: i'm sorry...maybe tomorrow will be better.";
+  }
+  return "sorry i'm a shitty dev and there's been an error :(";
+}
+
 function CompanionHousing() {
   const [promptAsked, setPromptAsked] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
+  const choicesList = ["good!", "okay", "not great."];
 
   console.log(promptAsked);
+  console.log(dialogueStage);
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.code);
-    if (event.code === "KeyA") {
+    if (dialogueStage === 0 && event.code === "KeyA") {
       setSelectedID((id) => Math.max(0, id - 1));
     }
-    if (event.code === "KeyD") {
+    if (dialogueStage === 0 && event.code === "KeyD") {
       setSelectedID((id) => Math.min(2, id + 1));
     }
-    if (event.code === "KeyS") {
+    if (dialogueStage < 2 && event.code === "KeyS") {
       // try catch for adding new mood
+      console.log(choicesList[selectedID]);
+      //setIsSubmitted(true);
+      setDialogueStage(dialogueStage + 1);
+      if (dialogueStage === 1) {
+        setPromptAsked(true);
+      }
     }
   };
   return (
@@ -39,9 +61,11 @@ function CompanionHousing() {
             prompt={
               promptAsked
                 ? "dino: can you tell me about something you liked about today?"
-                : "dino: how are you doing today? :)"
+                : dialogueStage === 0
+                ? "dino: how are you doing today? :)"
+                : switchResponse(selectedID)
             }
-            choices={promptAsked ? [] : ["good!", "okay", "not great."]}
+            choices={promptAsked ? [] : choicesList}
             selected={selectedID}
             promptAsked={promptAsked}
           />
