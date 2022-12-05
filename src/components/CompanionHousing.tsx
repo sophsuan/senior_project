@@ -53,7 +53,7 @@ function CompanionHousing() {
     if (dialogueStage === 0) setSelectedID((id) => Math.max(0, id - 1));
   };
   const handleClickDown = () => {
-    if (dialogueStage === 0) setSelectedID((id) => Math.max(0, id + 1));
+    if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
   };
   const handleClickConfrim = () => {
     setDialogueStage(dialogueStage + 1);
