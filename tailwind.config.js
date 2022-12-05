@@ -14,6 +14,9 @@ module.exports = {
         'black': colors.black,
         'red': colors.red,
         'blue': colors.blue,
+        'slate': colors.slate,
+        'stone': colors.stone,
+        'yellow': colors.yellow,
         'btn-yellow': 'FBF7BF'
     },
   },
