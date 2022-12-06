@@ -1,6 +1,7 @@
 import { STATES } from "mongoose";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import DinoPfp from "../dino_pfp_placeholder.png";
+import {userContext} from '../userContext';
 
 interface TextboxProps {
   prompt: string;
@@ -12,6 +13,8 @@ interface TextboxProps {
 }
 
 function Input({ promptAsked }: { promptAsked: boolean }) {
+  const { clientId } = useContext(userContext);
+
   if (promptAsked) {
     return (
       <div className="flex flex-col">
@@ -20,7 +23,7 @@ function Input({ promptAsked }: { promptAsked: boolean }) {
           placeholder="type response here"
           className="p-2.5 text-base rounded-lg text-inherit resize-none"
         ></textarea>
-        <button className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400">
+        <button onClick={() => console.log(clientId)} className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400">
           Submit
         </button>
       </div>
