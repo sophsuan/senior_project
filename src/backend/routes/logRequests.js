@@ -3,20 +3,22 @@ const express = require("express");
 
 const router = express.Router();
 
-// get all logs with no query, or get log by name and date
+// get all logs with no query
 router.get("/", async (req, res) => {
-  if (req.query) {
-    const userId = req.query.userId;
-    const date = req.query.date;
-    const log = await Logs.findOne({
-        userId: userId,
-        date: date
-    });
-    res.send(log);
-    return;
-  }
   const logs = await Logs.find({});
   res.send(logs);
+});
+
+// get log by name and date
+router.get("/findUser", async (req, res) => {
+  const userId = req.query.userId;
+  const date = req.query.date;
+  const log = await Logs.findOne({
+      userId: userId,
+      date: date
+  });
+  res.send(log);
+  return;
 });
 
 // create new log given a body
