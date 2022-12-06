@@ -1,5 +1,5 @@
 import { STATES } from "mongoose";
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import DinoPfp from "../dino_pfp_placeholder.png";
 import {userContext} from '../userContext';
 
@@ -12,8 +12,48 @@ interface TextboxProps {
   dialogueStage: number;
 }
 
-function Input({ promptAsked }: { promptAsked: boolean }) {
+function Input({ promptAsked, selected, prompt }: { promptAsked: boolean, selected: number, prompt: string }) {
+  const [response, setResponse] = useState('');
   const { clientId } = useContext(userContext);
+
+  const postEvent = async () => {
+    const date = new Date();
+    const newLog = {
+      userId: clientId,
+      date: date,
+      response: response,
+      mood: selected,
+    };
+    const newPrompt = {
+      prompt: prompt,
+      date: date,
+    }
+    await fetch('http://localhost:3001/api/log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        newLog
+      )
+    })
+    .then((response) => {
+      console.log(response)
+    }).catch((err) => console.log(err));
+
+    await fetch('http://localhost:3001/api/prompt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        newPrompt
+      )
+    })
+    .then((response) => {
+      console.log(response)
+    }).catch((err) => console.log(err));
+  };
 
   if (promptAsked) {
     return (
@@ -22,8 +62,10 @@ function Input({ promptAsked }: { promptAsked: boolean }) {
           rows={9}
           placeholder="type response here"
           className="p-2.5 text-base rounded-lg text-inherit resize-none"
+          value={response}
+          onChange={(e) => setResponse(e.target.value)}
         ></textarea>
-        <button onClick={() => console.log(clientId)} className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400">
+        <button onClick={postEvent} className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400">
           Submit
         </button>
       </div>
@@ -58,7 +100,6 @@ function LogNav({
 }
 
 function Textbox(props: TextboxProps) {
-  //  const [selectedID, setSelectedID] = useState(0);
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">
@@ -101,7 +142,11 @@ function Textbox(props: TextboxProps) {
             </ul>
           </div>
         </div>
-        <Input promptAsked={props.promptAsked} />
+        <Input 
+          promptAsked={props.promptAsked}
+          selected={props.selected}
+          prompt={props.prompt}
+        />
       </div>
     </div>
   );

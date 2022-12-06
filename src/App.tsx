@@ -6,13 +6,16 @@ import {userContext} from './userContext';
 
 function App() {
   const [user, setUser] = useState({clientId: ""});
-  // useEffect(() => {
-  //   var manifest = chrome.runtime.getManifest();
-  //   if (manifest.oauth2) {
-  //     var clientId = encodeURIComponent(manifest.oauth2.client_id);
-  //     setUser({clientId: clientId});
-  //   };
-  // });
+  useEffect(() => {
+    const fetchUser = () => {
+      var manifest = chrome.runtime.getManifest();
+      if (manifest.oauth2) {
+        var clientId = encodeURIComponent(manifest.oauth2.client_id);
+      setUser({clientId: clientId});
+      };
+    };
+    fetchUser();
+  }, []);
   return (
     <userContext.Provider value={user}>
       <div className="flex h-screen">
