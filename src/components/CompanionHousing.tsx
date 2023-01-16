@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from "react";
+import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
 import Textbox from "./Textbox";
@@ -26,23 +26,20 @@ function CompanionHousing() {
   const [pressedEffectDown, setPressedEffectDown] = useState(false);
   const [pressedEffectConfirm, setPressedEffectConfirm] = useState(false);
   const choicesList = ["good!", "okay", "not great."];
-  let promptIdx = 0;
-
-  console.log(promptAsked);
-  console.log(dialogueStage);
-
-  const switchPrompt = () => {
-    const promptsList = [
-      "dino: can you tell me about something you liked about today?",
-      "dino: what are you grateful for today",
-      "dino: what are some things you like about yourself?",
-      "dino: what are some things that always make you smile?",
-      "dino: what usually cheers you up when you're down?",
-      "dino: what are some things you're doing well right now?",
-    ];
-    if (dialogueStage !== 2) promptIdx = Math.floor(Math.random() * 6);
-    return promptsList[promptIdx];
-  };
+  const promptsList = [
+    "dino: can you tell me about something you liked about today?",
+    "dino: what are you grateful for today?",
+    "dino: what are some things you like about yourself?",
+    "dino: what are some things that always make you smile?",
+    "dino: what usually cheers you up when you're down?",
+    "dino: what are some things you're doing well right now?",
+  ];
+  const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
+  useEffect(() => {
+    if (dialogueStage !== 2) {
+      setPromptIdx(Math.floor(Math.random() * 6));
+    };
+  });
 
   const handleBack = () => {
     setPromptAsked(false);
@@ -55,8 +52,10 @@ function CompanionHousing() {
   const handleClickDown = () => {
     if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
   };
-  const handleClickConfrim = () => {
-    setDialogueStage(dialogueStage + 1);
+  const handleClickConfirm = () => {
+    if (dialogueStage !== 2) {
+      setDialogueStage(dialogueStage + 1);
+    }
     if (dialogueStage === 1) {
       setPromptAsked(true);
     }
@@ -117,7 +116,7 @@ function CompanionHousing() {
                 ? "dino: how are you doing today? :)"
                 : dialogueStage === 1
                 ? switchResponse(selectedID)
-                : switchPrompt()
+                : promptsList[promptIdx]
             }
             choices={promptAsked ? [] : choicesList}
             selected={selectedID}
@@ -138,7 +137,7 @@ function CompanionHousing() {
           <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
         </button>
         <button
-          onClick={handleClickConfrim}
+          onClick={handleClickConfirm}
           className={`${
             pressedEffectConfirm && "shadow-none bg-red-200 pt-1 "
           } aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}

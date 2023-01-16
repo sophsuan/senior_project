@@ -8,11 +8,16 @@ function App() {
   const [user, setUser] = useState({clientId: ""});
   useEffect(() => {
     const fetchUser = () => {
-      var manifest = chrome.runtime.getManifest();
-      if (manifest.oauth2) {
-        var clientId = encodeURIComponent(manifest.oauth2.client_id);
-      setUser({clientId: clientId});
-      };
+      try {
+        var manifest = chrome.runtime.getManifest();
+        if (manifest.oauth2) {
+          var clientId = encodeURIComponent(manifest.oauth2.client_id);
+        setUser({clientId: clientId});
+        };
+      }
+      catch (error) {
+        setUser({clientId: "guest"});
+      }
     };
     fetchUser();
   }, []);
