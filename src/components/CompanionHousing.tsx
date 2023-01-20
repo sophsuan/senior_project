@@ -35,6 +35,10 @@ function CompanionHousing() {
     "dino: what are some things you're doing well right now?",
   ];
   const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
+  // TODO: set progress and level by getting from backend
+  const [progress, setProgress] = useState(0); 
+  const [level, setLevel] = useState(5);
+
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
@@ -107,8 +111,8 @@ function CompanionHousing() {
     >
       <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked} />
-        <Dino promptAsked={promptAsked} />
+        <ProgressBar progress={progress} level={level} promptAsked={promptAsked} />
+        <Dino promptAsked={promptAsked} level={level}/>
         <div className="p-5">
           <Textbox
             prompt={
@@ -123,6 +127,7 @@ function CompanionHousing() {
             promptAsked={promptAsked}
             handlerFunc={handleBack}
             dialogueStage={dialogueStage}
+            level={level}
           />
         </div>
       </div>
