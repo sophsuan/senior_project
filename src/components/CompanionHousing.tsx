@@ -18,7 +18,7 @@ function switchResponse(param: number): string {
   return "sorry i'm a shitty dev and there's been an error :(";
 }
 
-function CompanionHousing() {
+function CompanionHousing({ experience }: { experience: number }) {
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -36,14 +36,22 @@ function CompanionHousing() {
   ];
   const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
   // TODO: set progress and level by getting from backend
-  const [progress, setProgress] = useState(0); 
-  const [level, setLevel] = useState(5);
+  const [progress, setProgress] = useState(Math.trunc((experience % 10) * 10)); 
+  const [level, setLevel] = useState(Math.trunc(experience / 10));
 
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
     };
-  });
+  }, [dialogueStage]);
+
+  // useEffect(() => {
+  //   setLevel(Math.floor(experience / 10));
+  // }, [setLevel, experience]);
+
+  // useEffect(() => {
+  //   setProgress(Math.trunc(experience / 10 * 100));
+  // }, [setProgress, experience]);
 
   const handleBack = () => {
     setPromptAsked(false);
@@ -111,7 +119,7 @@ function CompanionHousing() {
     >
       <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        <ProgressBar progress={progress} level={level} promptAsked={promptAsked} />
+        <ProgressBar progress={`w-[${progress}%]`} level={level} promptAsked={promptAsked} />
         <Dino promptAsked={promptAsked} level={level}/>
         <div className="p-5">
           <Textbox
