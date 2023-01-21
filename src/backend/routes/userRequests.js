@@ -92,4 +92,20 @@ router.put("/exp", async (req, res) => {
   }
 });
 
+/*
+router.patch("/exp", async (req, res) => {
+  const userId = req.query.userId;
+  const experience = req.query.experience;
+  const userPatch = req.body;
+
+  Users.updateUser(userId, userPatch, () => {
+    Users.lookupUser({userId}, (err, user) => {
+      if (err) return req.status(500).json({error: err});
+      services.updateUserServices(user);
+      res.send();
+    });
+  });
+})
+*/
+
 module.exports = router;

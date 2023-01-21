@@ -6,7 +6,7 @@ import Stage2 from "../images/stage2crop.png";
 import Stage3 from "../images/stage3crop.png";
 import Stage4 from "../images/stage4crop.png";
 import Stage5 from "../images/stage5crop.png";
-import {userContext} from '../userContext';
+import { userContext } from "../userContext";
 
 interface TextboxProps {
   prompt: string;
@@ -15,12 +15,19 @@ interface TextboxProps {
   promptAsked: boolean;
   handlerFunc: () => void;
   dialogueStage: number;
-  level: number
+  level: number;
 }
 
-function Input({ promptAsked, selected, prompt }: 
-  { promptAsked: boolean, selected: number, prompt: string }) {
-  const [response, setResponse] = useState('');
+function Input({
+  promptAsked,
+  selected,
+  prompt,
+}: {
+  promptAsked: boolean;
+  selected: number;
+  prompt: string;
+}) {
+  const [response, setResponse] = useState("");
   const { clientId } = useContext(userContext);
 
   const postEvent = async () => {
@@ -34,32 +41,43 @@ function Input({ promptAsked, selected, prompt }:
     const newPrompt = {
       prompt: prompt,
       date: date,
-    }
-    await fetch('http://localhost:3001/api/log', {
-      method: 'POST',
+    };
+    await fetch("http://localhost:3001/api/log", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        newLog
-      )
+      body: JSON.stringify(newLog),
     })
-    .then((response) => {
-      console.log(response)
-    }).catch((err) => console.log(err));
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
 
-    await fetch('http://localhost:3001/api/prompt', {
-      method: 'POST',
+    await fetch("http://localhost:3001/api/prompt", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        newPrompt
-      )
+      body: JSON.stringify(newPrompt),
     })
-    .then((response) => {
-      console.log(response)
-    }).catch((err) => console.log(err));
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => console.log(err));
+
+    await fetch("http://localhost:3001/api/user/exp", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: clientId,
+        experience: "555",
+      }),
+    })
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   };
 
   if (promptAsked) {
@@ -72,7 +90,10 @@ function Input({ promptAsked, selected, prompt }:
           value={response}
           onChange={(e) => setResponse(e.target.value)}
         ></textarea>
-        <button onClick={postEvent} className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400">
+        <button
+          onClick={postEvent}
+          className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400"
+        >
           Submit
         </button>
       </div>
@@ -163,7 +184,7 @@ function Textbox(props: TextboxProps) {
             </ul>
           </div>
         </div>
-        <Input 
+        <Input
           promptAsked={props.promptAsked}
           selected={props.selected}
           prompt={props.prompt}
