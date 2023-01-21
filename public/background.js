@@ -15,6 +15,15 @@ var url = "https://accounts.google.com/o/oauth2/v2/auth" +
           "&scope=" + scopes +
           "&nonce=" + nonce;
 
+function getUserId() {
+  return new Promise(function(resolve, reject){
+    chrome.identity.getProfileUserInfo(function(userInfo) {
+      console.log(userInfo.id);
+      resolve(userInfo.id);
+    });
+  });
+}
+
 window.onload = function() {
   chrome.identity.launchWebAuthFlow(
     {
@@ -26,36 +35,30 @@ window.onload = function() {
             console.log(chrome.runtime.lastError.message);
         }
         else {
-            // fetch("http://localhost:3001/api/user?" + new URLSearchParams(
-            //   { "userId" : clientId }
-            // ), {
-            //   method: 'GET'
-            // })
-            //   .then((response) => {
-            //     console.log(response);
-            //     response.json().then((data) => {
-            //         console.log(data);
-            //     });
-            // });
-
-            var body = {};
-            body["userId"] = clientId;
-            body["experience"] = 1234;
-            fetch('http://localhost:3001/api/user', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(
-                body
-              )
-            })
-            .then((response) => {
-              console.log(response);
-              response.json().then((data) => {
-                  console.log(data);
-              });
-            });
+          var body = {};
+          var userId = getUserId();
+            Promise.all([userId]).then(
+              function(results) {
+                body["userId"] = results[0];
+    
+                body["experience"] = 0;
+                fetch('http://localhost:3001/api/user', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(
+                    body
+                  )
+                })
+                .then((response) => {
+                  console.log(response);
+                  response.json().then((data) => {
+                      console.log(data);
+                  });
+                });
+              }
+            )
         }
     }
   );
