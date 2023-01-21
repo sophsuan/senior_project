@@ -23,6 +23,7 @@
   },
   "permissions": [
     "identity",
+    "identity.email",
     "tabs"
   ],
   "oauth2" : {
