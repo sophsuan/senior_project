@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from "react";
+import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
 import Textbox from "./Textbox";
@@ -18,7 +18,7 @@ function switchResponse(param: number): string {
   return "sorry i'm a shitty dev and there's been an error :(";
 }
 
-function CompanionHousing() {
+function CompanionHousing({ experience }: { experience: number }) {
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -26,23 +26,32 @@ function CompanionHousing() {
   const [pressedEffectDown, setPressedEffectDown] = useState(false);
   const [pressedEffectConfirm, setPressedEffectConfirm] = useState(false);
   const choicesList = ["good!", "okay", "not great."];
-  let promptIdx = 0;
+  const promptsList = [
+    "dino: can you tell me about something you liked about today?",
+    "dino: what are you grateful for today?",
+    "dino: what are some things you like about yourself?",
+    "dino: what are some things that always make you smile?",
+    "dino: what usually cheers you up when you're down?",
+    "dino: what are some things you're doing well right now?",
+  ];
+  const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
+  // TODO: set progress and level by getting from backend
+  const [progress, setProgress] = useState(Math.trunc((experience % 10) * 10)); 
+  const [level, setLevel] = useState(Math.trunc(experience / 10));
 
-  console.log(promptAsked);
-  console.log(dialogueStage);
+  useEffect(() => {
+    if (dialogueStage !== 2) {
+      setPromptIdx(Math.floor(Math.random() * 6));
+    };
+  }, [dialogueStage]);
 
-  const switchPrompt = () => {
-    const promptsList = [
-      "dino: can you tell me about something you liked about today?",
-      "dino: what are you grateful for today",
-      "dino: what are some things you like about yourself?",
-      "dino: what are some things that always make you smile?",
-      "dino: what usually cheers you up when you're down?",
-      "dino: what are some things you're doing well right now?",
-    ];
-    if (dialogueStage !== 2) promptIdx = Math.floor(Math.random() * 6);
-    return promptsList[promptIdx];
-  };
+  // useEffect(() => {
+  //   setLevel(Math.floor(experience / 10));
+  // }, [setLevel, experience]);
+
+  // useEffect(() => {
+  //   setProgress(Math.trunc(experience / 10 * 100));
+  // }, [setProgress, experience]);
 
   const handleBack = () => {
     setPromptAsked(false);
@@ -55,8 +64,10 @@ function CompanionHousing() {
   const handleClickDown = () => {
     if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
   };
-  const handleClickConfrim = () => {
-    setDialogueStage(dialogueStage + 1);
+  const handleClickConfirm = () => {
+    if (dialogueStage !== 2) {
+      setDialogueStage(dialogueStage + 1);
+    }
     if (dialogueStage === 1) {
       setPromptAsked(true);
     }
@@ -108,8 +119,8 @@ function CompanionHousing() {
     >
       <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
-        <ProgressBar progress="w-[50%]" level={1} promptAsked={promptAsked} />
-        <Dino promptAsked={promptAsked} />
+        <ProgressBar progress={`w-[${progress}%]`} level={level} promptAsked={promptAsked} />
+        <Dino promptAsked={promptAsked} level={level}/>
         <div className="p-5">
           <Textbox
             prompt={
@@ -117,13 +128,14 @@ function CompanionHousing() {
                 ? "dino: how are you doing today? :)"
                 : dialogueStage === 1
                 ? switchResponse(selectedID)
-                : switchPrompt()
+                : promptsList[promptIdx]
             }
             choices={promptAsked ? [] : choicesList}
             selected={selectedID}
             promptAsked={promptAsked}
             handlerFunc={handleBack}
             dialogueStage={dialogueStage}
+            level={level}
           />
         </div>
       </div>
@@ -138,7 +150,7 @@ function CompanionHousing() {
           <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
         </button>
         <button
-          onClick={handleClickConfrim}
+          onClick={handleClickConfirm}
           className={`${
             pressedEffectConfirm && "shadow-none bg-red-200 pt-1 "
           } aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}

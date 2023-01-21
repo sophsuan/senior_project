@@ -1,6 +1,11 @@
 import { STATES } from "mongoose";
 import React, { useState, useContext } from "react";
-import DinoPfp from "../dino_pfp_placeholder.png";
+import Stage0 from "../images/stage0crop.png";
+import Stage1 from "../images/stage1crop.png";
+import Stage2 from "../images/stage2crop.png";
+import Stage3 from "../images/stage3crop.png";
+import Stage4 from "../images/stage4crop.png";
+import Stage5 from "../images/stage5crop.png";
 import {userContext} from '../userContext';
 
 interface TextboxProps {
@@ -10,9 +15,11 @@ interface TextboxProps {
   promptAsked: boolean;
   handlerFunc: () => void;
   dialogueStage: number;
+  level: number
 }
 
-function Input({ promptAsked, selected, prompt }: { promptAsked: boolean, selected: number, prompt: string }) {
+function Input({ promptAsked, selected, prompt }: 
+  { promptAsked: boolean, selected: number, prompt: string }) {
   const [response, setResponse] = useState('');
   const { clientId } = useContext(userContext);
 
@@ -100,6 +107,20 @@ function LogNav({
 }
 
 function Textbox(props: TextboxProps) {
+  var DinoPfp;
+  if (props.level === 0) {
+    DinoPfp = Stage0;
+  } else if (props.level === 1) {
+    DinoPfp = Stage1;
+  } else if (props.level === 2) {
+    DinoPfp = Stage2;
+  } else if (props.level === 3) {
+    DinoPfp = Stage3;
+  } else if (props.level === 4) {
+    DinoPfp = Stage4;
+  } else {
+    DinoPfp = Stage5;
+  }
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">
@@ -108,8 +129,8 @@ function Textbox(props: TextboxProps) {
           handleBackFn={props.handlerFunc}
         />
         <div className="flex flex-row">
-          <div className="flex-none hidden lg:block box-border rounded-lg m-3 bg-white">
-            <img src={DinoPfp} alt="dino pic" className="pt-1 pl-1 pr-1" />
+          <div className="flex-none hidden lg:block box-border rounded-lg m-3 bg-white h-24 w-24">
+            <img src={DinoPfp} alt="dino pic" className="rounded-lg" />
           </div>
           <div>
             <p className="flex inline items-start font-bold text-white text-base p-1 text-inherit">
