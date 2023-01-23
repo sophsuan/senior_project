@@ -12,7 +12,7 @@ function Navbar() {
           <NavLink to="/logs">logs</NavLink>
         </div>
         <div className="border-4 border-main-bg hover:border-4 hover:border-white hover:cursor-pointer hover:rounded-lg p-2 rounded-3xl text-inherit">
-          <NavLink to="/mental">
+          <NavLink to="/resources">
             mental
             <br />
             health

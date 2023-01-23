@@ -5,6 +5,7 @@ import CompanionHousing from "./components/CompanionHousing";
 import { userContext } from "./userContext";
 import { Routes, Route } from "react-router-dom";
 import { LogsPage } from "./LogsPage";
+import { ResourcesPage } from "./ResourcesPage";
 
 function getUserId() {
   return new Promise(function (resolve, reject) {
@@ -64,10 +65,17 @@ function App() {
         </div>
 
         <Routes>
-          <Route index element={<CompanionHousing experience={experience} />} />
           <Route path="logs" element={<LogsPage />} />
           <Route
-            path="home"
+            path="resources"
+            element={
+              <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
+                <ResourcesPage />
+              </div>
+            }
+          />
+          <Route
+            path="*"
             element={
               <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
                 <CompanionHousing experience={experience} />
@@ -77,7 +85,6 @@ function App() {
               </div>
             }
           />
-          <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </div>
     </userContext.Provider>
