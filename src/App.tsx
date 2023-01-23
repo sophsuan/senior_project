@@ -65,7 +65,14 @@ function App() {
         </div>
 
         <Routes>
-          <Route path="logs" element={<LogsPage />} />
+          <Route
+            path="logs"
+            element={
+              <div className="flex-auto place-content-center">
+                <LogsPage />
+              </div>
+            }
+          />
           <Route
             path="resources"
             element={
