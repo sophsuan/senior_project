@@ -16,7 +16,9 @@ module.exports = {
         'blue': colors.blue,
         'slate': colors.slate,
         'stone': colors.stone,
+        'green': colors.green,
         'yellow': colors.yellow,
+        'gray': colors.gray,
         'btn-yellow': 'FBF7BF'
     },
   },
