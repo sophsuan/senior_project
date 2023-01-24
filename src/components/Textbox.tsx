@@ -1,4 +1,4 @@
-import { STATES } from "mongoose";
+import { PromiseProvider, STATES } from "mongoose";
 import React, { useState, useContext } from "react";
 import Stage0 from "../images/stage0crop.png";
 import Stage1 from "../images/stage1crop.png";
@@ -16,16 +16,27 @@ interface TextboxProps {
   handlerFunc: () => void;
   dialogueStage: number;
   level: number;
+  setDialogueStage : Function;
+  setPromptAsked : Function;
+  oldExperience : number;
 }
 
 function Input({
   promptAsked,
   selected,
   prompt,
+  dialogueStage,
+  setDialogueStage,
+  setPromptAsked,
+  oldExperience
 }: {
   promptAsked: boolean;
   selected: number;
   prompt: string;
+  dialogueStage: number;
+  oldExperience: number;
+  setDialogueStage: Function;
+  setPromptAsked: Function;
 }) {
   const [response, setResponse] = useState("");
   const { clientId } = useContext(userContext);
@@ -42,17 +53,37 @@ function Input({
       prompt: prompt,
       date: date,
     };
+    console.log("newlog:" + JSON.stringify(newLog));
     await fetch("http://localhost:3001/api/log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newLog),
+      body: JSON.stringify(
+        {
+          userId: "pain",
+          date: date,
+          response: response,
+          mood: selected
+        }
+      ),
     })
       .then((response) => {
         console.log(response);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        
+        console.log("body here: " +
+          JSON.stringify(
+          {
+            userId: clientId,
+            date: date,
+            response: response,
+            mood: selected
+          }
+        ));
+      });
 
     await fetch("http://localhost:3001/api/prompt", {
       method: "POST",
@@ -64,23 +95,31 @@ function Input({
       .then((response) => {
         console.log(response);
       })
-      .catch((err) => console.log(err));
+      .catch(
+        (err) => {
+          console.log(err)
+        }
+        );
 
-    await fetch("http://localhost:3001/api/user/exp", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: clientId,
-        experience: "555",
-      }),
-    })
+    await fetch("http://localhost:3001/api/user/exp" +
+      new URLSearchParams(
+        { userId : String(clientId),
+          experience : String(oldExperience + 1)
+        }),
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
+
+    setDialogueStage(3);
+    setPromptAsked(false);
   };
 
-  if (promptAsked) {
+  if (promptAsked && dialogueStage === 2) {
     return (
       <div className="flex flex-col">
         <textarea
@@ -158,11 +197,7 @@ function Textbox(props: TextboxProps) {
               {props.prompt}
             </p>
             <ul>
-              {props.dialogueStage === 1 ? (
-                <li className="flex items-start font-bold	text-red-200 text-base pt-4 pl-1 pb-1 text-inherit">
-                  Press enter key to continue...
-                </li>
-              ) : (
+              {props.dialogueStage === 0 ? (
                 props.choices.map((choice, i) =>
                   props.selected === i ? (
                     <li
@@ -180,6 +215,12 @@ function Textbox(props: TextboxProps) {
                     </li>
                   )
                 )
+              ) : props.dialogueStage === 1 ? (
+                <li className="flex items-start font-bold	text-red-200 text-base pt-4 pl-1 pb-1 text-inherit">
+                  Press enter key to continue...
+                </li>
+              ) : (
+                <></>
               )}
             </ul>
           </div>
@@ -188,6 +229,10 @@ function Textbox(props: TextboxProps) {
           promptAsked={props.promptAsked}
           selected={props.selected}
           prompt={props.prompt}
+          dialogueStage={props.dialogueStage}
+          setDialogueStage={props.setDialogueStage}
+          setPromptAsked={props.setPromptAsked}
+          oldExperience={props.oldExperience}
         />
       </div>
     </div>

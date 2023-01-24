@@ -83,7 +83,7 @@ router.put("/exp", async (req, res) => {
       }
     );
 
-    user.experience = experience;
+    user.experience = Number(experience);
     await user.save();
     res.send(`${userId} experience updated to ${experience}`);  
   } catch (error) {

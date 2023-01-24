@@ -36,14 +36,23 @@ function CompanionHousing({ experience }: { experience: number }) {
   ];
   const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
   // TODO: set progress and level by getting from backend
-  const [progress, setProgress] = useState(Math.trunc((experience % 10) * 10));
-  const [level, setLevel] = useState(Math.trunc(experience / 10));
+  const [progress, setProgress] = useState(0);
+  const [level, setLevel] = useState(0);
+  const [progressCSS, setProgressCSS] = useState("");
+
+  console.log("progress here: " + progress);
+  console.log("level here: " + level);
+  console.log("experience here: " + experience);
 
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
     }
-  }, [dialogueStage]);
+
+    setProgress(Math.trunc((experience % 10) * 10));
+    setProgressCSS(String(progress));
+    setLevel(Math.trunc(experience / 10));
+  }, [dialogueStage, progress, progressCSS, experience]);
 
   // useEffect(() => {
   //   setLevel(Math.floor(experience / 10));
@@ -120,20 +129,22 @@ function CompanionHousing({ experience }: { experience: number }) {
       <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
         <ProgressBar
-          progress={`w-[${progress}%]`}
+          progressCSS={progressCSS}
           level={level}
           promptAsked={promptAsked}
         />
-        <div>{experience}</div>
+        {/* <div>{experience}</div> */}
         <Dino promptAsked={promptAsked} level={level} />
         <div className="p-5">
           <Textbox
             prompt={
               dialogueStage === 0
                 ? "dino: how are you doing today? :)"
-                : dialogueStage === 1
-                ? switchResponse(selectedID)
-                : promptsList[promptIdx]
+                  : dialogueStage === 1
+                  ? switchResponse(selectedID)
+                    : dialogueStage === 2
+                    ? promptsList[promptIdx]
+                      : "dino: all done for today! i'm very proud of you, see you tomorrow :D"
             }
             choices={promptAsked ? [] : choicesList}
             selected={selectedID}
@@ -141,6 +152,9 @@ function CompanionHousing({ experience }: { experience: number }) {
             handlerFunc={handleBack}
             dialogueStage={dialogueStage}
             level={level}
+            setDialogueStage={setDialogueStage}
+            setPromptAsked={setPromptAsked}
+            oldExperience={experience}
           />
         </div>
       </div>

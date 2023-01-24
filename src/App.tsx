@@ -14,7 +14,7 @@ function getUserId() {
 }
 
 function App() {
-  const [user, setUser] = useState({ clientId: "" }); // <- setUser is here and just believe that it works to set the user variable
+  const [user, setUser] = useState({ clientId: "aaaaeeee" }); // <- setUser is here and just believe that it works to set the user variable
   const [experience, setExperience] = useState(0);
   useEffect(() => {
     const fetchUser = () => {

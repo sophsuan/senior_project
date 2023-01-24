@@ -3,6 +3,10 @@ const express = require("express");
 
 const router = express.Router();
 
+var bodyParser = require('body-parser');
+router.use(bodyParser.json()); // support json encoded bodies
+router.use(bodyParser.urlencoded({ extended: true }));
+
 // get prompt by date
 router.get("/", async (req, res) => {
   const date = req.query.date;
