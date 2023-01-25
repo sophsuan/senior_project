@@ -1,3 +1,4 @@
+import { useEffect, useContext } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import {
@@ -18,6 +19,7 @@ import { useState } from "react";
 import UpIcon from "./up icon.png";
 import DownIcon from "./down icon.png";
 import HeartIcon from "./heart icon.png";
+import { userContext } from "./userContext";
 
 const tmpLogs = [
   {
@@ -45,6 +47,31 @@ function classNames(...classes: (string | boolean)[]) {
 }
 
 export function LogsPage() {
+  const { clientId } = useContext(userContext);
+  const [logs, setLogs] = useState();
+
+  // useEffect(() => {
+  //   const fetchLogs = async () => {
+  //     try {
+  //       await fetch(
+  //         "http://localhost:3001/api/user?" +
+  //           new URLSearchParams({ userId: clientId }),
+  //         {
+  //           method: "GET",
+  //         }
+  //       ).then((response) => {
+  //         return response.json().then((response) => {
+  //           console.log("response experience", response);
+  //           setLogs(response);
+  //         });
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   if (clientId !== "") fetchLogs();
+  // }, [clientId]);
+
   let today = startOfToday();
   let [selectedDay, setSelectedDay] = useState(today);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));

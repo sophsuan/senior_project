@@ -31,7 +31,12 @@ function Input({
   const { clientId } = useContext(userContext);
 
   const postEvent = async () => {
-    const date = new Date();
+    var date = new Date();
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+    var date = new Date(month, day, year);
+
     const newLog = {
       userId: clientId,
       date: date,
