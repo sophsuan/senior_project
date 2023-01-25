@@ -3,11 +3,11 @@ import PixelHeart from './../images/pixel-heart.svg';
 
 function ProgressBar ({progressCSS, level, promptAsked} : {progressCSS : string, level : number, promptAsked : boolean}) {
   useEffect(() => {
-    console.log("progressCSS: " + progressCSS);
+    console.log("progressCSS1: " + progressCSS);
   }, [progressCSS]);
 
   if (!promptAsked) {
-    console.log("progressCSS: " + progressCSS);
+    console.log("progressCSS2: " + progressCSS);
     const progressStyle = progressCSS;
 
     return (

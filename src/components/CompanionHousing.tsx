@@ -18,7 +18,9 @@ function switchResponse(param: number): string {
   return "sorry i'm a shitty dev and there's been an error :(";
 }
 
-function CompanionHousing({ experience }: { experience: number }) {
+function CompanionHousing(
+    { experience, setExperience }: { experience: number, setExperience : Function }
+  ) {
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -40,9 +42,9 @@ function CompanionHousing({ experience }: { experience: number }) {
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
 
-  console.log("progress here: " + progress);
-  console.log("level here: " + level);
-  console.log("experience here: " + experience);
+  console.log("CompanionHousing.tsx ... progress here: " + progress);
+  console.log("CompanionHousing.tsx ... level here: " + level);
+  console.log("CompanionHousing.tsx ... experience here: " + experience);
 
   useEffect(() => {
     if (dialogueStage !== 2) {
@@ -155,6 +157,7 @@ function CompanionHousing({ experience }: { experience: number }) {
             setDialogueStage={setDialogueStage}
             setPromptAsked={setPromptAsked}
             oldExperience={experience}
+            setExperience={setExperience}
           />
         </div>
       </div>

@@ -19,6 +19,7 @@ interface TextboxProps {
   setDialogueStage : Function;
   setPromptAsked : Function;
   oldExperience : number;
+  setExperience: Function;
 }
 
 function Input({
@@ -28,7 +29,8 @@ function Input({
   dialogueStage,
   setDialogueStage,
   setPromptAsked,
-  oldExperience
+  oldExperience,
+  setExperience,
 }: {
   promptAsked: boolean;
   selected: number;
@@ -37,6 +39,7 @@ function Input({
   oldExperience: number;
   setDialogueStage: Function;
   setPromptAsked: Function;
+  setExperience: Function;
 }) {
   const [response, setResponse] = useState("");
   const { clientId } = useContext(userContext);
@@ -101,7 +104,7 @@ function Input({
         }
         );
 
-    await fetch("http://localhost:3001/api/user/exp/" +
+    await fetch("http://localhost:3001/api/user/exp?" +
       new URLSearchParams(
         { userId : String(clientId),
           experience : String(oldExperience + 1)
@@ -112,11 +115,16 @@ function Input({
           "Content-Type": "application/json",
         },
       })
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response);
+        console.log("oldexperience: " + oldExperience);
+      })
       .catch((err) => console.log(err));
 
     setDialogueStage(3);
     setPromptAsked(false);
+
+    setExperience(oldExperience + 1);
   };
 
   if (promptAsked && dialogueStage === 2) {
@@ -181,6 +189,7 @@ function Textbox(props: TextboxProps) {
   } else {
     DinoPfp = Stage5;
   }
+  console.log("rendering... experience+1: " + (props.oldExperience + 1));
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">
@@ -233,6 +242,7 @@ function Textbox(props: TextboxProps) {
           setDialogueStage={props.setDialogueStage}
           setPromptAsked={props.setPromptAsked}
           oldExperience={props.oldExperience}
+          setExperience={props.setExperience}
         />
       </div>
     </div>
