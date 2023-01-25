@@ -32,10 +32,10 @@ function Input({
 
   const postEvent = async () => {
     var date = new Date();
-    var month = date.getUTCMonth() + 1; //months from 1-12
-    var day = date.getUTCDate();
-    var year = date.getUTCFullYear();
-    var date = new Date(month, day, year);
+    var month = date.getMonth() + 1; //months from 1-12
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var date = new Date(year, month, day);
 
     const newLog = {
       userId: clientId,
