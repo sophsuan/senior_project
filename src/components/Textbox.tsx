@@ -101,7 +101,7 @@ function Input({
         }
         );
 
-    await fetch("http://localhost:3001/api/user/exp" +
+    await fetch("http://localhost:3001/api/user/exp/" +
       new URLSearchParams(
         { userId : String(clientId),
           experience : String(oldExperience + 1)
