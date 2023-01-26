@@ -83,7 +83,7 @@ router.put("/exp", async (req, res) => {
       }
     );
 
-    user.experience = experience;
+    user.experience = Number(experience);
     await user.save();
     res.send(`${userId} experience updated to ${experience}`);  
   } catch (error) {
@@ -91,5 +91,21 @@ router.put("/exp", async (req, res) => {
     console.log(`error is ${error.message}`);
   }
 });
+
+/*
+router.patch("/exp", async (req, res) => {
+  const userId = req.query.userId;
+  const experience = req.query.experience;
+  const userPatch = req.body;
+
+  Users.updateUser(userId, userPatch, () => {
+    Users.lookupUser({userId}, (err, user) => {
+      if (err) return req.status(500).json({error: err});
+      services.updateUserServices(user);
+      res.send();
+    });
+  });
+})
+*/
 
 module.exports = router;
