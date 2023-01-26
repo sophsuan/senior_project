@@ -8,7 +8,7 @@ import Stage5 from "../images/stage5.png";
 
 
 function Dino({ promptAsked, level  } : {promptAsked : boolean, level : number}) {
-  console.log(promptAsked);
+  console.log("dino.tsx promptAsked:" + promptAsked);
   var FullDino;
   if (level === 0) {
     FullDino = Stage0;

@@ -6,7 +6,12 @@ module.exports = {
             "./public/index.html",
             "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        '80%' : '80%',
+        '90%' : '90%'
+      }
+    },
     colors: {
         'main-bg': '#DF7E74',
         'secondary-bg': '#F9AE91',

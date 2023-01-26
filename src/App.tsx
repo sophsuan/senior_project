@@ -17,7 +17,7 @@ function getUserId() {
 }
 
 function App() {
-  const [user, setUser] = useState({ clientId: "" }); // <- setUser is here and just believe that it works to set the user variable
+  const [user, setUser] = useState({ clientId: "aaaaeeee" }); // <- setUser is here and just believe that it works to set the user variable
   const [experience, setExperience] = useState(0);
   useEffect(() => {
     const fetchUser = () => {
@@ -84,12 +84,15 @@ function App() {
           <Route
             path="*"
             element={
-              <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
-                <CompanionHousing experience={experience} />
-                <div className=" flex font-black text-stone-700 font-mono w-full justify-center text-xl pt-4">
-                  Use keys ⇧, ⇩, and Enter to navigate your game device
+                <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
+                  <CompanionHousing
+                    experience={experience}
+                    setExperience={setExperience}
+                  />
+                  <div className=" flex font-black text-stone-700 font-mono w-full justify-center text-xl pt-4">
+                    Use keys ⇧, ⇩, and Enter to navigate your game device
+                  </div>
                 </div>
-              </div>
             }
           />
         </Routes>
