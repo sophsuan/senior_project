@@ -13,15 +13,13 @@ router.get("/", async (req, res) => {
   res.send(logs);
 });
 
-// get log by name and date
+// get logs by name
 router.get("/findUser", async (req, res) => {
   const userId = req.query.userId;
-  const date = req.query.date;
-  const log = await Logs.findOne({
+  const logs = await Logs.find({
       userId: userId,
-      date: date
   });
-  res.send(log);
+  res.send(logs);
   return;
 });
 

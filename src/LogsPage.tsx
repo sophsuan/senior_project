@@ -21,56 +21,39 @@ import DownIcon from "./down icon.png";
 import HeartIcon from "./heart icon.png";
 import { userContext } from "./userContext";
 
-const tmpLogs = [
-  {
-    userId: "user1",
-    date: "2023-01-09T13:00",
-    response: "This is the first log",
-    mood: "1",
-  },
-  {
-    userId: "user2",
-    date: "2023-01-01T17:00",
-    response: "This is the second log",
-    mood: "0",
-  },
-  {
-    userId: "user3",
-    date: "2023-01-20T14:00",
-    response: "This is the third log",
-    mood: "2",
-  },
-];
-
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export function LogsPage() {
   const { clientId } = useContext(userContext);
-  const [logs, setLogs] = useState();
+  const [logs, setLogs] = useState(
+    [{userId: "",
+      date: "",
+      response: "",
+      mood: "",}]);
 
-  // useEffect(() => {
-  //   const fetchLogs = async () => {
-  //     try {
-  //       await fetch(
-  //         "http://localhost:3001/api/user?" +
-  //           new URLSearchParams({ userId: clientId }),
-  //         {
-  //           method: "GET",
-  //         }
-  //       ).then((response) => {
-  //         return response.json().then((response) => {
-  //           console.log("response experience", response);
-  //           setLogs(response);
-  //         });
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   if (clientId !== "") fetchLogs();
-  // }, [clientId]);
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        await fetch(
+          "http://localhost:3001/api/log/findUser?" +
+            new URLSearchParams({ userId: clientId }),
+          {
+            method: "GET",
+          }
+        ).then((response) => {
+          return response.json().then((response) => {
+            console.log("response: ", response);
+            setLogs(response);
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (clientId !== "") fetchLogs();
+  }, [clientId]);
 
   let today = startOfToday();
   let [selectedDay, setSelectedDay] = useState(today);
@@ -93,10 +76,10 @@ export function LogsPage() {
   }
 
   function hasLog(day: Date): Number {
-    for (var i = 0; i < tmpLogs.length; i++) {
-      if (isSameDay(day, parseISO(tmpLogs[i].date))) {
-        console.log(day, parseISO(tmpLogs[i].date));
-        return Number(tmpLogs[i].mood);
+    for (var i = 0; i < logs.length; i++) {
+      if (isSameDay(day, parseISO(logs[i].date))) {
+        console.log(day, parseISO(logs[i].date));
+        return Number(logs[i].mood);
       }
     }
     return -1;
@@ -161,11 +144,11 @@ export function LogsPage() {
                       type="button"
                       onClick={() => setSelectedDay(day)}
                       className={classNames(
-                        hasLog(day) === 2 &&
+                        hasLog(day) === 0 &&
                           "bg-green-300 text-white font-semibold",
                         hasLog(day) === 1 &&
                           "bg-yellow-600 text-white font-semibold",
-                        hasLog(day) === 0 &&
+                        hasLog(day) === 2 &&
                           "bg-main-bg text-white font-semibold",
                         isEqual(day, selectedDay) &&
                           !isToday(day) &&

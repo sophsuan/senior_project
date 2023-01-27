@@ -46,7 +46,7 @@ function Input({
 
   const postEvent = async () => {
     var date = new Date();
-    var month = date.getMonth() + 1; //months from 1-12
+    var month = date.getMonth()
     var day = date.getDate();
     var year = date.getFullYear();
     var date = new Date(year, month, day);
@@ -69,7 +69,7 @@ function Input({
       },
       body: JSON.stringify(
         {
-          userId: "pain",
+          userId: clientId,
           date: date,
           response: response,
           mood: selected
