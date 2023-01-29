@@ -16,9 +16,9 @@ interface TextboxProps {
   handlerFunc: () => void;
   dialogueStage: number;
   level: number;
-  setDialogueStage : Function;
-  setPromptAsked : Function;
-  oldExperience : number;
+  setDialogueStage: Function;
+  setPromptAsked: Function;
+  oldExperience: number;
   setExperience: Function;
 }
 
@@ -46,7 +46,7 @@ function Input({
 
   const postEvent = async () => {
     var date = new Date();
-    var month = date.getMonth()
+    var month = date.getMonth();
     var day = date.getDate();
     var year = date.getFullYear();
     var date = new Date(year, month, day);
@@ -61,36 +61,34 @@ function Input({
       prompt: prompt,
       date: date,
     };
-    console.log("newlog:" + JSON.stringify(newLog));
+    //console.log("newlog:" + JSON.stringify(newLog));
     await fetch("http://localhost:3001/api/log", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(
-        {
-          userId: clientId,
-          date: date,
-          response: response,
-          mood: selected
-        }
-      ),
+      body: JSON.stringify({
+        userId: clientId,
+        date: date,
+        response: response,
+        mood: selected,
+      }),
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch((err) => {
-        console.log(err);
-        
-        console.log("body here: " +
-          JSON.stringify(
-          {
-            userId: clientId,
-            date: date,
-            response: response,
-            mood: selected
-          }
-        ));
+        //console.log(err);
+
+        console.log(
+          "body here: " +
+            JSON.stringify({
+              userId: clientId,
+              date: date,
+              response: response,
+              mood: selected,
+            })
+        );
       });
 
     await fetch("http://localhost:3001/api/prompt", {
@@ -101,28 +99,28 @@ function Input({
       body: JSON.stringify(newPrompt),
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
-      .catch(
-        (err) => {
-          console.log(err)
-        }
-        );
+      .catch((err) => {
+        console.log(err);
+      });
 
-    await fetch("http://localhost:3001/api/user/exp?" +
-      new URLSearchParams(
-        { userId : String(clientId),
-          experience : String(oldExperience + 1)
+    await fetch(
+      "http://localhost:3001/api/user/exp?" +
+        new URLSearchParams({
+          userId: String(clientId),
+          experience: String(oldExperience + 1),
         }),
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-      })
+      }
+    )
       .then((response) => {
-        console.log(response);
-        console.log("oldexperience: " + oldExperience);
+        //console.log(response);
+        //console.log("oldexperience: " + oldExperience);
       })
       .catch((err) => console.log(err));
 
@@ -194,7 +192,7 @@ function Textbox(props: TextboxProps) {
   } else {
     DinoPfp = Stage5;
   }
-  console.log("rendering... experience+1: " + (props.oldExperience + 1));
+  //console.log("rendering... experience+1: " + (props.oldExperience + 1));
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">

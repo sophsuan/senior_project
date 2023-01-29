@@ -10,14 +10,14 @@ import { ResourcesPage } from "./ResourcesPage";
 function getUserId() {
   return new Promise(function (resolve, reject) {
     chrome.identity.getProfileUserInfo(function (userInfo) {
-      console.log(userInfo.id);
+      //console.log(userInfo.id);
       resolve(userInfo.id);
     });
   });
 }
 
 function App() {
-  const [user, setUser] = useState({ clientId: "aaaaeeee" }); // <- setUser is here and just believe that it works to set the user variable
+  const [user, setUser] = useState({ clientId: "aaaaeeee" });
   const [experience, setExperience] = useState(0);
   useEffect(() => {
     const fetchUser = () => {
@@ -25,7 +25,7 @@ function App() {
         var userPromise = getUserId();
 
         Promise.all([userPromise]).then(function (results) {
-          setUser({ clientId: String(results[0]) }); // lol typescript
+          setUser({ clientId: String(results[0]) });
         });
       } catch (error) {
         setUser({ clientId: "guest" });
@@ -46,7 +46,7 @@ function App() {
           }
         ).then((response) => {
           return response.json().then((response) => {
-            console.log("response experience", response);
+            //console.log("response experience", response);
             setExperience(Number(response[0].experience));
           });
         });
@@ -68,8 +68,8 @@ function App() {
           <Route
             path="logs"
             element={
-              <div className="flex-auto place-content-center">
-                <LogsPage />
+              <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
+                <LogsPage experience={experience} />
               </div>
             }
           />
@@ -84,15 +84,15 @@ function App() {
           <Route
             path="*"
             element={
-                <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
-                  <CompanionHousing
-                    experience={experience}
-                    setExperience={setExperience}
-                  />
-                  <div className=" flex font-black text-stone-700 font-mono w-full justify-center text-xl pt-4">
-                    Use keys ⇧, ⇩, and Enter to navigate your game device
-                  </div>
+              <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
+                <CompanionHousing
+                  experience={experience}
+                  setExperience={setExperience}
+                />
+                <div className=" flex font-black text-stone-700 font-mono w-full justify-center text-xl pt-4">
+                  Use keys ⇧, ⇩, and Enter to navigate your game device
                 </div>
+              </div>
             }
           />
         </Routes>
