@@ -133,9 +133,10 @@ function Input({
         <textarea
           rows={9}
           placeholder="type response here"
-          className="p-2.5 text-base rounded-lg text-inherit resize-none"
+          className="p-2.5 text-base rounded-lg text-inherit resize-none tab"
           value={response}
           onChange={(e) => setResponse(e.target.value)}
+          autoFocus={true}
         ></textarea>
         <button
           onClick={postEvent}
