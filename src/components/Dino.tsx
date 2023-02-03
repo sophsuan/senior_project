@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Stage0 from "../images/stage0.png";
 import Stage1 from "../images/stage1.png";
 import Stage2 from "../images/stage2.png";
@@ -6,9 +6,8 @@ import Stage3 from "../images/stage3.png";
 import Stage4 from "../images/stage4.png";
 import Stage5 from "../images/stage5.png";
 
-
-function Dino({ promptAsked, level  } : {promptAsked : boolean, level : number}) {
-  console.log("dino.tsx promptAsked:" + promptAsked);
+function Dino({ promptAsked, level }: { promptAsked: boolean; level: number }) {
+  //console.log("dino.tsx promptAsked:" + promptAsked);
   var FullDino;
   if (level === 0) {
     FullDino = Stage0;
@@ -24,13 +23,9 @@ function Dino({ promptAsked, level  } : {promptAsked : boolean, level : number})
     FullDino = Stage5;
   }
   if (!promptAsked) {
-    return (         
+    return (
       <div className="flex justify-center p-5">
-        <img
-          src={FullDino}
-          alt="dino pic"
-          className="object-contain w-48"
-        />
+        <img src={FullDino} alt="dino pic" className="object-contain w-48" />
       </div>
     );
   }
