@@ -129,6 +129,12 @@ function Input({
 
     setExperience(oldExperience + 1);
   };
+  const handleTextArea = (e: any) => {
+    // Return if user presses the enter key
+    if(e.nativeEvent.inputType === "insertLineBreak") return;
+
+    setResponse(e.target.value);
+ };
 
   if (promptAsked && dialogueStage === 2) {
     return (
@@ -138,7 +144,7 @@ function Input({
           placeholder="type response here"
           className="p-2.5 text-base rounded-lg text-inherit resize-none tab"
           value={response}
-          onChange={(e) => setResponse(e.target.value)}
+          onChange={(e) => { handleTextArea(e) }}
           autoFocus={true}
         ></textarea>
         <button
