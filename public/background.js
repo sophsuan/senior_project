@@ -18,7 +18,6 @@ var url = "https://accounts.google.com/o/oauth2/v2/auth" +
 function getUserId() {
   return new Promise(function(resolve, reject){
     chrome.identity.getProfileUserInfo(function(userInfo) {
-      console.log(userInfo.id);
       resolve(userInfo.id);
     });
   });

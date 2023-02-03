@@ -53,7 +53,7 @@ router.get("/exp", async (req, res) => {
 // post new user given body
 router.post("/", async (req, res) => {
   // var jsonBody = qs.parse(req.body);
-  console.log(req.body);
+  //console.log(req.body);
   const {
     userId,
     experience

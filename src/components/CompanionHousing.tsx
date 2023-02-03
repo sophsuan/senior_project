@@ -18,9 +18,13 @@ function switchResponse(param: number): string {
   return "sorry i'm a shitty dev and there's been an error :(";
 }
 
-function CompanionHousing(
-    { experience, setExperience }: { experience: number, setExperience : Function }
-  ) {
+function CompanionHousing({
+  experience,
+  setExperience,
+}: {
+  experience: number;
+  setExperience: Function;
+}) {
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -42,9 +46,9 @@ function CompanionHousing(
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
 
-  console.log("CompanionHousing.tsx ... progress here: " + progress);
-  console.log("CompanionHousing.tsx ... level here: " + level);
-  console.log("CompanionHousing.tsx ... experience here: " + experience);
+  //console.log("CompanionHousing.tsx ... progress here: " + progress);
+  //console.log("CompanionHousing.tsx ... level here: " + level);
+  //console.log("CompanionHousing.tsx ... experience here: " + experience);
 
   useEffect(() => {
     if (dialogueStage !== 2) {
@@ -97,7 +101,7 @@ function CompanionHousing(
     if (event.code === "Enter") {
       // try catch for adding new mood
       if (dialogueStage < 2) {
-        console.log(choicesList[selectedID]);
+        //console.log(choicesList[selectedID]);
         //setIsSubmitted(true);
         setDialogueStage(dialogueStage + 1);
         if (dialogueStage === 1) {
@@ -109,7 +113,7 @@ function CompanionHousing(
   };
 
   const keyUpHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(event.code);
+    //console.log(event.code);
     if (event.code === "ArrowUp") {
       setPressedEffectUp(false);
     }
@@ -142,11 +146,11 @@ function CompanionHousing(
             prompt={
               dialogueStage === 0
                 ? "dino: how are you doing today? :)"
-                  : dialogueStage === 1
-                  ? switchResponse(selectedID)
-                    : dialogueStage === 2
-                    ? promptsList[promptIdx]
-                      : "dino: all done for today! i'm very proud of you, see you tomorrow :D"
+                : dialogueStage === 1
+                ? switchResponse(selectedID)
+                : dialogueStage === 2
+                ? promptsList[promptIdx]
+                : "dino: all done for today! i'm very proud of you, see you tomorrow :D"
             }
             choices={promptAsked ? [] : choicesList}
             selected={selectedID}
