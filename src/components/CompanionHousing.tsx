@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
 import Textbox from "./Textbox";
 import UpIcon from "../up icon.png";
 import DownIcon from "../down icon.png";
 import HeartIcon from "../heart icon.png";
+import { userContext } from "../userContext";
 
 function switchResponse(param: number): string {
   switch (param) {
@@ -41,14 +42,12 @@ function CompanionHousing({
     "dino: what are some things you're doing well right now?",
   ];
   const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
-  // TODO: set progress and level by getting from backend
   const [progress, setProgress] = useState(0);
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
+  const [response, setResponse] = useState("");
 
-  //console.log("CompanionHousing.tsx ... progress here: " + progress);
-  //console.log("CompanionHousing.tsx ... level here: " + level);
-  //console.log("CompanionHousing.tsx ... experience here: " + experience);
+  const { clientId } = useContext(userContext);
 
   useEffect(() => {
     if (dialogueStage !== 2) {
@@ -60,13 +59,74 @@ function CompanionHousing({
     setLevel(Math.trunc(experience / 10));
   }, [dialogueStage, progress, progressCSS, experience]);
 
-  // useEffect(() => {
-  //   setLevel(Math.floor(experience / 10));
-  // }, [setLevel, experience]);
+  const postEvent = async () => {
+    var date = new Date();
+    var month = date.getMonth();
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var date = new Date(year, month, day);
 
-  // useEffect(() => {
-  //   setProgress(Math.trunc(experience / 10 * 100));
-  // }, [setProgress, experience]);
+    const newPrompt = {
+      prompt: prompt,
+      date: date,
+    };
+    await fetch("http://localhost:3001/api/log", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: clientId,
+        date: date,
+        response: response,
+        mood: selectedID,
+      }),
+    })
+      .catch((err) => {
+        console.log(err);
+
+        console.log(
+          "body here: " +
+            JSON.stringify({
+              userId: clientId,
+              date: date,
+              response: response,
+              mood: selectedID,
+            })
+        );
+      });
+
+    await fetch("http://localhost:3001/api/prompt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPrompt),
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await fetch(
+      "http://localhost:3001/api/user/exp?" +
+        new URLSearchParams({
+          userId: String(clientId),
+          experience: String(experience + 1),
+        }),
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .catch((err) => console.log(err));
+
+    setDialogueStage(3);
+    setPromptAsked(false);
+
+    setExperience(experience + 1);
+  };
 
   const handleBack = () => {
     setPromptAsked(false);
@@ -86,6 +146,9 @@ function CompanionHousing({
     if (dialogueStage === 1) {
       setPromptAsked(true);
     }
+    if (dialogueStage === 2) {
+      postEvent();
+    }
   };
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -98,22 +161,25 @@ function CompanionHousing({
       if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
       setPressedEffectDown(true);
     }
-    if (event.code === "Enter") {
+    if (event.code === "Enter" && !event.shiftKey) {
       // try catch for adding new mood
       if (dialogueStage < 2) {
-        //console.log(choicesList[selectedID]);
-        //setIsSubmitted(true);
         setDialogueStage(dialogueStage + 1);
         if (dialogueStage === 1) {
           setPromptAsked(true);
         }
       }
+      if (dialogueStage === 2) {
+        postEvent();
+      }
       setPressedEffectConfirm(true);
+    }
+    if (event.code === "Enter" && event.shiftKey) {
+      setResponse(response + "\n");
     }
   };
 
   const keyUpHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    //console.log(event.code);
     if (event.code === "ArrowUp") {
       setPressedEffectUp(false);
     }
@@ -139,7 +205,6 @@ function CompanionHousing({
           level={level}
           promptAsked={promptAsked}
         />
-        {/* <div>{experience}</div> */}
         <Dino promptAsked={promptAsked} level={level} />
         <div className="p-5">
           <Textbox
@@ -158,10 +223,8 @@ function CompanionHousing({
             handlerFunc={handleBack}
             dialogueStage={dialogueStage}
             level={level}
-            setDialogueStage={setDialogueStage}
-            setPromptAsked={setPromptAsked}
-            oldExperience={experience}
-            setExperience={setExperience}
+            response={response}
+            setResponse={setResponse}
           />
         </div>
       </div>
@@ -198,13 +261,6 @@ function CompanionHousing({
         </button>
       </div>
     </div>
-    /*     <div clas
-    sName="flex flex-col font-mono h-full items-center justify-center text-2xl text-white w-full">
-      <div className="aspect-square bg-secondary-bg justify-center items-center rounded-full text-center text-inherit w-9/12">
-        dinosaur
-        <Textbox prompt="dino: how are you feeling today? :)" choices={["good!", "okay", "not great."]}/>
-      </div>
-    </div> */
   );
 }
 
