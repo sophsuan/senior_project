@@ -85,9 +85,13 @@ function App() {
             element={
               <div className="flex-auto">
                 <div className="flex font-black text-stone-700 font-mono w-full justify-center text-xl pt-4">
-                  Use keys ⇧, ⇩, and Enter to navigate your game device
+                  <div className="flex width-[50%] bg-gray-100 p-3 rounded-lg mr-[5%]">
+                    <div className="box-border bg-gray-200 border-gray-500 border-2 rounded-lg pl-4 pr-4 pt-2 pb-2" >⇧</div>
+                    <div className="box-border bg-gray-200 border-gray-500 border-2 rounded-lg pl-4 pr-4 pt-2 pb-2 ml-2">⇩</div>
+                    <div className="box-border bg-gray-200 border-gray-500 border-2 rounded-lg pl-4 pr-4 pt-2 pb-2 ml-2">Enter</div>
+                  </div>
                 </div>
-                <div className="flex-auto pl-[10%] pr-[15%] pt-[2.5%] pb-[2.5%]">
+                <div className="flex-auto pl-[10%] pr-[15%] pt-[1%] pb-[1%]">
                   <CompanionHousing
                     experience={experience}
                     setExperience={setExperience}
