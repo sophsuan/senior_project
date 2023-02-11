@@ -30,13 +30,6 @@ interface LogsProps {
   experience: number;
 }
 
-interface Log {
-  userId: String;
-  date: String;
-  response: String;
-  mood: String;
-}
-
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -58,7 +51,7 @@ export function LogsPage(props: LogsProps) {
           }
         ).then((response) => {
           return response.json().then((response) => {
-            //console.log("response: ", response);
+            console.log("response: ", response);
             setLogs(response);
           });
         });
@@ -115,9 +108,9 @@ export function LogsPage(props: LogsProps) {
     return -1;
   }
 
-  function findLog(): Log {
+  function findLog(): string {
     let res = logs.find((log) => isSameDay(parseISO(log.date), selectedDay));
-    return res ? res : { userId: "", date: "", response: "", mood: "" };
+    return res ? res.response : "";
   }
 
   function handleClick() {
@@ -158,9 +151,7 @@ export function LogsPage(props: LogsProps) {
                 rows={9}
                 placeholder="type response here"
                 className="p-2.5 text-base rounded-lg text-inherit resize-none w-full border-solid border-2 border-black"
-                value={
-                  "response will be here when typescript stops being annoying"
-                } /*findLog().response*/
+                value={findLog()}
                 readOnly={true}
               ></textarea>
               <div className="flex flex-row justify-around pt-2">
