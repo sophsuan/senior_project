@@ -1,12 +1,10 @@
-import { PromiseProvider, STATES } from "mongoose";
-import React, { useState, useContext } from "react";
+import React from "react";
 import Stage0 from "../images/stage0crop.png";
 import Stage1 from "../images/stage1crop.png";
 import Stage2 from "../images/stage2crop.png";
 import Stage3 from "../images/stage3crop.png";
 import Stage4 from "../images/stage4crop.png";
 import Stage5 from "../images/stage5crop.png";
-import { userContext } from "../userContext";
 
 interface TextboxProps {
   prompt: string;
@@ -16,136 +14,40 @@ interface TextboxProps {
   handlerFunc: () => void;
   dialogueStage: number;
   level: number;
-  setDialogueStage: Function;
-  setPromptAsked: Function;
-  oldExperience: number;
-  setExperience: Function;
+  response: string;
+  setResponse: Function
 }
 
 function Input({
   promptAsked,
-  selected,
-  prompt,
   dialogueStage,
-  setDialogueStage,
-  setPromptAsked,
-  oldExperience,
-  setExperience,
+  response,
+  setResponse
 }: {
   promptAsked: boolean;
-  selected: number;
-  prompt: string;
   dialogueStage: number;
-  oldExperience: number;
-  setDialogueStage: Function;
-  setPromptAsked: Function;
-  setExperience: Function;
+  response: string;
+  setResponse: Function
 }) {
-  const [response, setResponse] = useState("");
-  const { clientId } = useContext(userContext);
-
-  const postEvent = async () => {
-    var date = new Date();
-    var month = date.getMonth();
-    var day = date.getDate();
-    var year = date.getFullYear();
-    var date = new Date(year, month, day);
-
-    const newLog = {
-      userId: clientId,
-      date: date,
-      response: response,
-      mood: selected,
-    };
-    const newPrompt = {
-      prompt: prompt,
-      date: date,
-    };
-    //console.log("newlog:" + JSON.stringify(newLog));
-    await fetch("http://localhost:3001/api/log", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: clientId,
-        date: date,
-        response: response,
-        mood: selected,
-      }),
-    })
-      .then((response) => {
-        //console.log(response);
-      })
-      .catch((err) => {
-        //console.log(err);
-
-        console.log(
-          "body here: " +
-            JSON.stringify({
-              userId: clientId,
-              date: date,
-              response: response,
-              mood: selected,
-            })
-        );
-      });
-
-    await fetch("http://localhost:3001/api/prompt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newPrompt),
-    })
-      .then((response) => {
-        //console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    await fetch(
-      "http://localhost:3001/api/user/exp?" +
-        new URLSearchParams({
-          userId: String(clientId),
-          experience: String(oldExperience + 1),
-        }),
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        //console.log(response);
-        //console.log("oldexperience: " + oldExperience);
-      })
-      .catch((err) => console.log(err));
-
-    setDialogueStage(3);
-    setPromptAsked(false);
-
-    setExperience(oldExperience + 1);
-  };
+  const handleTextArea = (e: any) => {
+    // Return if user presses the enter key
+    if (e.nativeEvent.inputType === "insertLineBreak") {
+      return;
+    }
+    setResponse(e.target.value);
+ };
 
   if (promptAsked && dialogueStage === 2) {
     return (
       <div className="flex flex-col">
         <textarea
-          rows={9}
+          rows={10}
           placeholder="type response here"
-          className="p-2.5 text-base rounded-lg text-inherit resize-none"
+          className="p-2.5 text-base rounded-lg text-inherit resize-none tab"
           value={response}
-          onChange={(e) => setResponse(e.target.value)}
+          onChange={(e) => {handleTextArea(e)}}
+          autoFocus={true}
         ></textarea>
-        <button
-          onClick={postEvent}
-          className="font-mono space-y-1 text-2xl text-yellow-900 font-black rounded-lg bg-yellow-300 mt-3 w-full pt-2 pb-2 hover:bg-yellow-400 active:bg-yellow-400"
-        >
-          Submit
-        </button>
       </div>
     );
   }
@@ -192,7 +94,6 @@ function Textbox(props: TextboxProps) {
   } else {
     DinoPfp = Stage5;
   }
-  //console.log("rendering... experience+1: " + (props.oldExperience + 1));
   return (
     <div className="flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4">
       <div className="flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white">
@@ -239,15 +140,22 @@ function Textbox(props: TextboxProps) {
         </div>
         <Input
           promptAsked={props.promptAsked}
-          selected={props.selected}
-          prompt={props.prompt}
           dialogueStage={props.dialogueStage}
-          setDialogueStage={props.setDialogueStage}
-          setPromptAsked={props.setPromptAsked}
-          oldExperience={props.oldExperience}
-          setExperience={props.setExperience}
+          response={props.response}
+          setResponse={props.setResponse}
         />
+        <div>
+        {props.dialogueStage === 2 ? (
+          <p className="flex items-start font-bold	text-red-200 text-base pt-4 pl-1 pb-1 text-inherit">
+            Press enter key to continue...
+          </p>
+          ) : (
+            <></>
+          )
+        }
       </div>
+      </div>
+
     </div>
   );
 }
