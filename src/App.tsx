@@ -6,6 +6,7 @@ import { userContext } from "./userContext";
 import { Routes, Route } from "react-router-dom";
 import { LogsPage } from "./LogsPage";
 import { ResourcesPage } from "./ResourcesPage";
+import InfoModal from "./components/InfoModal";
 
 function getUserId() {
   return new Promise(function (resolve, reject) {
@@ -101,6 +102,11 @@ function App() {
             }
           />
         </Routes>
+        <div className="flex items-end">
+          <div className="mr-10 mb-10 z-15">
+            <InfoModal></InfoModal>
+          </div>
+        </div>
       </div>
     </userContext.Provider>
   );
