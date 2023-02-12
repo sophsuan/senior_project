@@ -24,41 +24,28 @@ function getUserId() {
 }
 
 window.onload = function() {
-  chrome.identity.launchWebAuthFlow(
-    {
-        "url": url, 
-        "interactive":true
-    }, 
-    function(redirectedTo) {
-        if (chrome.runtime.lastError) {
-            console.log(chrome.runtime.lastError.message);
-        }
-        else {
-          var body = {};
-          var userId = getUserId();
-            Promise.all([userId]).then(
-              function(results) {
-                body["userId"] = results[0];
-    
-                body["experience"] = 0;
-                fetch('http://localhost:3001/api/user', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(
-                    body
-                  )
-                })
-                .then((response) => {
-                  console.log(response);
-                  response.json().then((data) => {
-                      console.log(data);
-                  });
-                });
-              }
-            )
-        }
+  var body = {};
+  var userId = getUserId();
+  Promise.all([userId]).then(
+    function(results) {
+      body["userId"] = results[0];
+
+      body["experience"] = 0;
+      fetch('http://localhost:3001/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          body
+        )
+      })
+      .then((response) => {
+        console.log(response);
+        response.json().then((data) => {
+            console.log(data);
+        });
+      });
     }
   );
 };
