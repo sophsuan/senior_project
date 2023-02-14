@@ -59,6 +59,21 @@ function CompanionHousing({
     setLevel(Math.trunc(experience / 10));
   }, [dialogueStage, progress, progressCSS, experience]);
 
+  const calculateExp = () => {
+    switch (level) {
+      case 0:
+        return experience + 5;
+      case 1:
+        return experience + 4;
+      case 2:
+        return experience + 3;
+      case 3:
+        return experience + 2;
+      default:
+        return experience + 1;
+    }
+  };
+
   const postEvent = async () => {
     var date = new Date();
     var month = date.getMonth();
@@ -109,7 +124,7 @@ function CompanionHousing({
       "http://localhost:3001/api/user/exp?" +
         new URLSearchParams({
           userId: String(clientId),
-          experience: String(experience + 1)
+          experience: String(calculateExp())
         }),
       {
         method: "PUT",
@@ -122,7 +137,7 @@ function CompanionHousing({
     setDialogueStage(3);
     setPromptAsked(false);
 
-    setExperience(experience + 1);
+    setExperience(calculateExp());
   };
 
   const handleBack = () => {
