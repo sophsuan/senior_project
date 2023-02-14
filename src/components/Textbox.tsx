@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, forwardRef } from "react";
 import Stage0 from "../images/stage0crop.png";
 import Stage1 from "../images/stage1crop.png";
 import Stage2 from "../images/stage2crop.png";
@@ -14,6 +14,7 @@ interface TextboxProps {
   promptAsked: boolean;
   handlerFunc: () => void;
   dialogueStage: number;
+  setDialogueStage: Function;
   level: number;
   response: string;
   setResponse: Function;
@@ -82,8 +83,21 @@ function LogNav({
   return null;
 }
 
-function Textbox(props: TextboxProps) {
+const Textbox = forwardRef(function Textbox(
+  props: TextboxProps,
+  ref: React.ForwardedRef<HTMLDivElement>
+) {
   var DinoPfp;
+
+  useEffect(() => {
+    // Focuses on game device
+    if (ref && typeof ref !== "function") {
+      if (ref.current) {
+        ref.current.focus();
+      }
+    }
+  });
+
   if (props.level === 0) {
     DinoPfp = Stage0;
   } else if (props.level === 1) {
@@ -97,6 +111,12 @@ function Textbox(props: TextboxProps) {
   } else {
     DinoPfp = Stage5;
   }
+
+  const handleChoiceClick = (i: number) => {
+    props.setSelected(i);
+    props.setDialogueStage(props.dialogueStage + 1);
+  };
+
   return (
     <div className='flex font-mono bg-main-bg w-full h-full justify-center items-center rounded-lg p-4'>
       <div className='flex flex-col box-border h-full w-full p-4 border-4 rounded-lg border-white'>
@@ -121,7 +141,10 @@ function Textbox(props: TextboxProps) {
                       className='flex items-start font-bold	text-white text-base pl-5 text-inherit'
                     >
                       <p className='p-1'>▶</p>
-                      <button className='border-2 border-main-bg hover:border-2 hover:border-white hover:cursor-pointer hover:rounded-lg p-1 rounded-3xl text-inherit'>
+                      <button
+                        className='border-2 border-main-bg hover:border-2 hover:border-white hover:cursor-pointer hover:rounded-lg p-1 rounded-3xl text-inherit'
+                        onClick={() => handleChoiceClick(i)}
+                      >
                         {choice}
                       </button>
                     </li>
@@ -132,7 +155,7 @@ function Textbox(props: TextboxProps) {
                     >
                       <button
                         className='border-2 border-main-bg hover:border-2 hover:border-white hover:cursor-pointer hover:rounded-lg p-1 rounded-3xl text-inherit'
-                        onClick={() => props.setSelected(i)}
+                        onClick={() => handleChoiceClick(i)}
                       >
                         {choice}
                       </button>
@@ -167,6 +190,6 @@ function Textbox(props: TextboxProps) {
       </div>
     </div>
   );
-}
+});
 
 export default Textbox;

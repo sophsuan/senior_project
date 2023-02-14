@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
 import Textbox from "./Textbox";
@@ -26,6 +26,7 @@ function CompanionHousing({
   experience: number;
   setExperience: Function;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -209,6 +210,7 @@ function CompanionHousing({
       tabIndex={0}
       onKeyDown={keyDownHandler}
       onKeyUp={keyUpHandler}
+      ref={ref}
     >
       <div className='aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl'>
         {/* inside the screen*/}
@@ -235,9 +237,11 @@ function CompanionHousing({
             promptAsked={promptAsked}
             handlerFunc={handleBack}
             dialogueStage={dialogueStage}
+            setDialogueStage={setDialogueStage}
             level={level}
             response={response}
             setResponse={setResponse}
+            ref={ref}
           />
         </div>
       </div>
