@@ -30,13 +30,6 @@ interface LogsProps {
   experience: number;
 }
 
-interface Log {
-  userId: String;
-  date: String;
-  response: String;
-  mood: String;
-}
-
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -58,7 +51,7 @@ export function LogsPage(props: LogsProps) {
           }
         ).then((response) => {
           return response.json().then((response) => {
-            //console.log("response: ", response);
+            console.log("response: ", response);
             setLogs(response);
           });
         });
@@ -105,6 +98,15 @@ export function LogsPage(props: LogsProps) {
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
 
+  function previousDay() {
+    let day = add(selectedDay, { days: -1 });
+    setSelectedDay(day);
+  }
+  function nextDay() {
+    let day = add(selectedDay, { days: 1 });
+    setSelectedDay(day);
+  }
+
   function hasLog(day: Date): Number {
     for (var i = 0; i < logs.length; i++) {
       if (isSameDay(day, parseISO(logs[i].date))) {
@@ -115,9 +117,9 @@ export function LogsPage(props: LogsProps) {
     return -1;
   }
 
-  function findLog(): Log {
+  function findLog(): string {
     let res = logs.find((log) => isSameDay(parseISO(log.date), selectedDay));
-    return res ? res : { userId: "", date: "", response: "", mood: "" };
+    return res ? res.response : "";
   }
 
   function handleClick() {
@@ -158,15 +160,27 @@ export function LogsPage(props: LogsProps) {
                 rows={9}
                 placeholder="type response here"
                 className="p-2.5 text-base rounded-lg text-inherit resize-none w-full border-solid border-2 border-black"
-                value={
-                  "response will be here when typescript stops being annoying"
-                } /*findLog().response*/
+                value={findLog()}
                 readOnly={true}
               ></textarea>
               <div className="flex flex-row justify-around pt-2">
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
-                <div>{format(selectedDay, "MMM-dd-yyyy").toString()}</div>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="rounded-md w-20 m-2 flex place-content-center"
+                  onClick={previousDay}
+                >
+                  <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <div className="font-mono text-lg font-bold pt-2">
+                  {format(selectedDay, "MMM-dd-yyyy").toString()}
+                </div>
+                <button
+                  type="button"
+                  className="rounded-md h-15 w-20 m-2 flex place-content-center"
+                  onClick={nextDay}
+                >
+                  <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
               </div>
             </div>
           </div>
