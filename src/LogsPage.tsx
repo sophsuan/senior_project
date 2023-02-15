@@ -98,6 +98,15 @@ export function LogsPage(props: LogsProps) {
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy"));
   }
 
+  function previousDay() {
+    let day = add(selectedDay, { days: -1 });
+    setSelectedDay(day);
+  }
+  function nextDay() {
+    let day = add(selectedDay, { days: 1 });
+    setSelectedDay(day);
+  }
+
   function hasLog(day: Date): Number {
     for (var i = 0; i < logs.length; i++) {
       if (isSameDay(day, parseISO(logs[i].date))) {
@@ -155,9 +164,23 @@ export function LogsPage(props: LogsProps) {
                 readOnly={true}
               ></textarea>
               <div className="flex flex-row justify-around pt-2">
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
-                <div>{format(selectedDay, "MMM-dd-yyyy").toString()}</div>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="rounded-md w-20 m-2 flex place-content-center"
+                  onClick={previousDay}
+                >
+                  <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <div className="font-mono text-lg font-bold pt-2">
+                  {format(selectedDay, "MMM-dd-yyyy").toString()}
+                </div>
+                <button
+                  type="button"
+                  className="rounded-md h-15 w-20 m-2 flex place-content-center"
+                  onClick={nextDay}
+                >
+                  <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
               </div>
             </div>
           </div>
