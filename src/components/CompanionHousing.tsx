@@ -77,7 +77,9 @@ function CompanionHousing({
       setWrittenPrompt(promptsList[promptIdx].slice(6));
     }
 
-    localStorage.setItem("dialogueStage", ""+dialogueStage);
+    if (dialogueStage == 3) {
+      localStorage.setItem("dialogueStage", ""+dialogueStage);
+    }
 
     setProgress(Math.trunc((experience % 10) * 10));
     setProgressCSS(String(progress));
