@@ -27,7 +27,6 @@ function CompanionHousing({
   setExperience: Function;
 }) {
   const [promptAsked, setPromptAsked] = useState(false);
-  const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
   const [pressedEffectUp, setPressedEffectUp] = useState(false);
   const [pressedEffectDown, setPressedEffectDown] = useState(false);
@@ -50,6 +49,27 @@ function CompanionHousing({
 
   const { clientId } = useContext(userContext);
 
+  const [dialogueStage, setDialogueStage] = useState(() => {
+    const storedDiaologueStage = localStorage.getItem("dialogueStage");
+    if (storedDiaologueStage) {
+      return Number(storedDiaologueStage);
+    } else {
+      return 0;
+    }
+  });
+
+  const [countdown, setCountdown] = useState(() => {
+    const storedCountdown = localStorage.getItem("countdown");
+    if (storedCountdown) {
+      return Number(storedCountdown);
+    } else {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      return midnight.getTime() - now.getTime();
+    }
+  });
+
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
@@ -61,6 +81,20 @@ function CompanionHousing({
     setLevel(Math.trunc(experience / 10));
   }, [dialogueStage, progress, progressCSS, experience]);
 
+  useEffect(() => {
+    localStorage.setItem("countdown", ""+countdown);
+  }, [countdown]);
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      setCountdown(midnight.getTime() - now.getTime());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const postEvent = async () => {
     var date = new Date();
     var month = date.getMonth();
@@ -68,10 +102,6 @@ function CompanionHousing({
     var year = date.getFullYear();
     var date = new Date(year, month, day);
 
-    // const newPrompt = {
-    //   prompt: prompt,
-    //   date: date,
-    // };
     await fetch("http://localhost:3001/api/log", {
       method: "POST",
       headers: {
