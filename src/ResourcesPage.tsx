@@ -17,21 +17,54 @@ export const ResourcesPage = () => {
           <div className="flex text-l p-3 justify-center font-black font-mono">
             <ul className="list-disc pl-5">
               <li>
-                988 Suicide & Crisis Lifeline: 988 for English or Spanish, or
-                Lifeline Chat.{" "}
+                <a
+                  className="text-blue-600 underline dark:text-blue-500 hover:no-underline"
+                  href="https://988lifeline.org/"
+                >
+                  988 Suicide & Crisis Lifeline
+                </a>
+                : 988 for English or Spanish, or{" "}
+                <a
+                  className="underline hover:no-underline"
+                  href="https://988lifeline.org/chat/"
+                >
+                  Lifeline Chat
+                </a>
+                . TTY users can use their preferred relay service or dial 711
+                then 988.
               </li>
               <li>
-                TTY users can use their preferred relay service or dial 711 then
-                988.{" "}
+                <p className="text-blue-600 inline">Crisis Text Line</p>: Text
+                SIGNS to 741741 for 24/7, anonymous, free crisis counseling
+                Disaster Distress Helpline: CALL or TEXT 1-800-985-5990 (press 2
+                for Spanish)
               </li>
               <li>
-                Crisis Text Line: Text SIGNS to 741741 for 24/7, anonymous, free
-                crisis counseling Disaster Distress Helpline: CALL or TEXT
-                1-800-985-5990 (press 2 for Spanish)
+                <a
+                  className="text-blue-600 underline dark:text-blue-500 hover:no-underline"
+                  href="https://www.samhsa.gov/disaster-preparedness"
+                >
+                  Disaster Distress Helpline
+                </a>
+                : CALL or TEXT 1-800-985-5990 (press 2 for Spanish)
+              </li>
+              <li>
+                <a
+                  className="text-blue-600 underline dark:text-blue-500 hover:no-underline"
+                  href="https://locator.apa.org/?_ga=1.122738379.1939913089.1455299072"
+                >
+                  American Psychological Association:
+                </a>{" "}
+                Find a Psychologist for professional assistance
               </li>
               <br />
-              source and more:
-              https://www.cdc.gov/mentalhealth/tools-resources/individuals/index.htm
+              <p className="text-blue-600">source and more resources:</p>
+              <a
+                className="underline hover:no-underline"
+                href="https://www.cdc.gov/mentalhealth/tools-resources/individuals/index.htm"
+              >
+                https://www.cdc.gov/mentalhealth/tools-resources/individuals/index.htm
+              </a>
             </ul>
           </div>
         </div>
@@ -39,18 +72,21 @@ export const ResourcesPage = () => {
       <div className="hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4">
         {/* the buttons */}
         <button
-          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          disabled={true}
+          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg`}
         >
           <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
         </button>
         <button
-          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          disabled={true}
+          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg `}
         >
           <img src={HeartIcon} alt="heart" className="object-contain h-18" />
         </button>
 
         <button
-          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          disabled={true}
+          className={`${"shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg `}
         >
           <img
             src={DownIcon}
