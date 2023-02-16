@@ -28,12 +28,14 @@ router.post("/", async (req, res) => {
     const {
         userId,
         date,
+        prompt,
         response,
         mood
     } = req.body;
     let newLog = new Logs({
         userId,
         date,
+        prompt,
         response,
         mood
     });

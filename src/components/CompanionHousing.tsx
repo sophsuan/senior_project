@@ -46,12 +46,14 @@ function CompanionHousing({
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
   const [response, setResponse] = useState("");
+  const [writtenPrompt, setWrittenPrompt]= useState("");
 
   const { clientId } = useContext(userContext);
 
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
+      setWrittenPrompt(promptsList[promptIdx].slice(6));
     }
 
     setProgress(Math.trunc((experience % 10) * 10));
@@ -66,10 +68,10 @@ function CompanionHousing({
     var year = date.getFullYear();
     var date = new Date(year, month, day);
 
-    const newPrompt = {
-      prompt: prompt,
-      date: date,
-    };
+    // const newPrompt = {
+    //   prompt: prompt,
+    //   date: date,
+    // };
     await fetch("http://localhost:3001/api/log", {
       method: "POST",
       headers: {
@@ -78,6 +80,7 @@ function CompanionHousing({
       body: JSON.stringify({
         userId: clientId,
         date: date,
+        prompt: writtenPrompt,
         response: response,
         mood: selectedID,
       }),
@@ -90,22 +93,32 @@ function CompanionHousing({
             JSON.stringify({
               userId: clientId,
               date: date,
+              prompt: writtenPrompt,
               response: response,
               mood: selectedID,
             })
         );
       });
 
-    await fetch("http://localhost:3001/api/prompt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newPrompt),
-    })
-      .catch((err) => {
-        console.log(err);
-      });
+      console.log("bingus: " +
+      JSON.stringify({
+        userId: clientId,
+        date: date,
+        prompt: writtenPrompt,
+        response: response,
+        mood: selectedID,
+      }));
+
+    // await fetch("http://localhost:3001/api/prompt", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(newPrompt),
+    // })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
     await fetch(
       "http://localhost:3001/api/user/exp?" +

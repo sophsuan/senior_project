@@ -4,6 +4,7 @@ const logSchema = new mongoose.Schema(
     {
         userId: String,
         date: Date,
+        prompt: String,
         response: String,
         mood: String
     },
