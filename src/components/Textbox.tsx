@@ -91,12 +91,14 @@ const Textbox = forwardRef(function Textbox(
 
   useEffect(() => {
     // Focuses on game device
-    if (ref && typeof ref !== "function") {
-      if (ref.current) {
-        ref.current.focus();
+    if (props.dialogueStage !== 2) {
+      if (ref && typeof ref !== "function") {
+        if (ref.current) {
+          ref.current.focus();
+        }
       }
     }
-  });
+  }, [props.dialogueStage]);
 
   if (props.level === 0) {
     DinoPfp = Stage0;
