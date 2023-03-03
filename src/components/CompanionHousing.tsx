@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  forwardRef
+} from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
 import Textbox from "./Textbox";
@@ -19,14 +25,16 @@ function switchResponse(param: number): string {
   return "sorry i'm a shitty dev and there's been an error :(";
 }
 
-function CompanionHousing({
-  experience,
-  setExperience
-}: {
+interface CompanionHousingProps {
   experience: number;
   setExperience: Function;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
+}
+
+const CompanionHousing = forwardRef(function CompanionHousing(
+  props: CompanionHousingProps,
+  ref: React.ForwardedRef<HTMLDivElement>
+) {
+  // const ref = useRef<HTMLDivElement>(null);
   const [promptAsked, setPromptAsked] = useState(false);
   const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
@@ -55,23 +63,23 @@ function CompanionHousing({
       setPromptIdx(Math.floor(Math.random() * 6));
     }
 
-    setProgress(Math.trunc((experience % 10) * 10));
+    setProgress(Math.trunc((props.experience % 10) * 10));
     setProgressCSS(String(progress));
-    setLevel(Math.trunc(experience / 10));
-  }, [dialogueStage, progress, progressCSS, experience]);
+    setLevel(Math.trunc(props.experience / 10));
+  }, [dialogueStage, progress, progressCSS, props.experience]);
 
   const calculateExp = () => {
     switch (level) {
       case 0:
-        return experience + 5;
+        return props.experience + 5;
       case 1:
-        return experience + 4;
+        return props.experience + 4;
       case 2:
-        return experience + 3;
+        return props.experience + 3;
       case 3:
-        return experience + 2;
+        return props.experience + 2;
       default:
-        return experience + 1;
+        return props.experience + 1;
     }
   };
 
@@ -138,7 +146,7 @@ function CompanionHousing({
     setDialogueStage(3);
     setPromptAsked(false);
 
-    setExperience(calculateExp());
+    props.setExperience(calculateExp());
   };
 
   const handleBack = () => {
@@ -276,6 +284,6 @@ function CompanionHousing({
       </div>
     </div>
   );
-}
+});
 
 export default CompanionHousing;

@@ -98,7 +98,7 @@ const Textbox = forwardRef(function Textbox(
         }
       }
     }
-  }, [props.dialogueStage]);
+  }, [props.dialogueStage, ref]);
 
   if (props.level === 0) {
     DinoPfp = Stage0;

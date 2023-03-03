@@ -21,18 +21,18 @@ const customStyles = {
   overlay: { zIndex: 1000 }
 };
 
-function InfoModal() {
+function InfoModal({
+  modalIsOpen,
+  setIsOpen
+}: {
+  modalIsOpen: boolean;
+  setIsOpen: Function;
+}) {
   // let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
 
   function openModal() {
     setIsOpen(true);
   }
-
-  // function afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   subtitle.style.color = '#f00';
-  // }
 
   function closeModal() {
     setIsOpen(false);
@@ -41,7 +41,14 @@ function InfoModal() {
   return (
     <div className='font-mono text-white border-4 rounded-full z-15'>
       <div>
-        <button className='text-8xl pl-5 pr-5' onClick={openModal}>
+        <button
+          className='text-8xl pl-5 pr-5'
+          onClick={openModal}
+          onFocus={() => {
+            if (document.activeElement instanceof HTMLElement)
+              document.activeElement.blur();
+          }}
+        >
           ?
         </button>
       </div>
