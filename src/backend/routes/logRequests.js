@@ -23,17 +23,31 @@ router.get("/findUser", async (req, res) => {
   return;
 });
 
+// get logs by name
+router.get("/findUserDate", async (req, res) => {
+  const userId = req.query.userId;
+  const date = req.query.date;
+  const logs = await Logs.find({
+      userId: userId,
+      date: date
+  });
+  res.send(logs);
+  return;
+});
+
 // create new log given a body
 router.post("/", async (req, res) => {
     const {
         userId,
         date,
+        prompt,
         response,
         mood
     } = req.body;
     let newLog = new Logs({
         userId,
         date,
+        prompt,
         response,
         mood
     });

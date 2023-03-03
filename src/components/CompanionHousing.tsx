@@ -28,7 +28,6 @@ function CompanionHousing({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [promptAsked, setPromptAsked] = useState(false);
-  const [dialogueStage, setDialogueStage] = useState(0);
   const [selectedID, setSelectedID] = useState(0);
   const [pressedEffectUp, setPressedEffectUp] = useState(false);
   const [pressedEffectDown, setPressedEffectDown] = useState(false);
@@ -47,18 +46,62 @@ function CompanionHousing({
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
   const [response, setResponse] = useState("");
+  const [writtenPrompt, setWrittenPrompt]= useState("");
 
   const { clientId } = useContext(userContext);
+
+  const [dialogueStage, setDialogueStage] = useState(() => {
+    const storedDiaologueStage = localStorage.getItem("dialogueStage");
+    if (storedDiaologueStage) {
+      return Number(storedDiaologueStage);
+    } else {
+      return 0;
+    }
+  });
+
+  const [countdown, setCountdown] = useState(() => {
+    const storedCountdown = localStorage.getItem("countdown");
+    if (storedCountdown) {
+      return Number(storedCountdown);
+    } else {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      return midnight.getTime() - now.getTime();
+    }
+  });
 
   useEffect(() => {
     if (dialogueStage !== 2) {
       setPromptIdx(Math.floor(Math.random() * 6));
+      setWrittenPrompt(promptsList[promptIdx].slice(6));
+    }
+
+    if (dialogueStage == 3) {
+      localStorage.setItem("dialogueStage", ""+dialogueStage);
     }
 
     setProgress(Math.trunc((experience % 10) * 10));
     setProgressCSS(String(progress));
     setLevel(Math.trunc(experience / 10));
   }, [dialogueStage, progress, progressCSS, experience]);
+
+  useEffect(() => {
+    localStorage.setItem("countdown", ""+countdown);
+    if (countdown <= 1999) {
+      setDialogueStage(0);
+    }
+  }, [countdown]);
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      setCountdown(midnight.getTime() - now.getTime());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const calculateExp = () => {
     switch (level) {
@@ -94,22 +137,23 @@ function CompanionHousing({
       body: JSON.stringify({
         userId: clientId,
         date: date,
+        prompt: writtenPrompt,
         response: response,
         mood: selectedID
       })
     }).catch(err => {
       console.log(err);
-
-      console.log(
-        "body here: " +
-          JSON.stringify({
-            userId: clientId,
-            date: date,
-            response: response,
-            mood: selectedID
-          })
-      );
-    });
+        console.log(
+          "body here: " +
+            JSON.stringify({
+              userId: clientId,
+              date: date,
+              prompt: writtenPrompt,
+              response: response,
+              mood: selectedID,
+            })
+        );
+      });
 
     await fetch("http://localhost:3001/api/prompt", {
       method: "POST",

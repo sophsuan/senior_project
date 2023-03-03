@@ -37,7 +37,7 @@ function classNames(...classes: (string | boolean)[]) {
 export function LogsPage(props: LogsProps) {
   const { clientId } = useContext(userContext);
   const [logs, setLogs] = useState([
-    { userId: "", date: "", response: "", mood: "" },
+    { userId: "", date: "", prompt: "", response: "", mood: "" },
   ]);
 
   useEffect(() => {
@@ -122,6 +122,11 @@ export function LogsPage(props: LogsProps) {
     return res ? res.response : "";
   }
 
+  function findPrompt() : string {
+    let res = logs.find((log) => isSameDay(parseISO(log.date), selectedDay));
+    return res ? res.prompt : "";
+  }
+
   function handleClick() {
     setIsDayView(true);
   }
@@ -153,7 +158,7 @@ export function LogsPage(props: LogsProps) {
                   <img src={DinoPfp} alt="dino pic" className="rounded-lg" />
                 </div>
                 <p className="flex inline items-start font-semibold text-black text-base p-1 pl-6 text-inherit max-w-[70%]">
-                  prompt: This is a prompt in question form?
+                  {findPrompt()}
                 </p>
               </div>
               <textarea
