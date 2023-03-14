@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import CompanionHousing from "./components/CompanionHousing";
@@ -18,8 +18,11 @@ function getUserId() {
 }
 
 function App() {
+  const ref = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState({ clientId: "aaaaeeee" });
   const [experience, setExperience] = useState(0);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
   useEffect(() => {
     const fetchUser = () => {
       try {
@@ -57,6 +60,14 @@ function App() {
     };
     if (user.clientId !== "") fetchExperience();
   }, [user.clientId]);
+
+  useLayoutEffect(() => {
+    if (!modalIsOpen) {
+      if (ref.current) {
+        ref.current.focus();
+      }
+    }
+  }, [modalIsOpen, ref]);
 
   return (
     <userContext.Provider value={user}>
@@ -102,6 +113,7 @@ function App() {
                   <CompanionHousing
                     experience={experience}
                     setExperience={setExperience}
+                    ref={ref}
                   />
                 </div>
               </div>
@@ -110,7 +122,7 @@ function App() {
         </Routes>
         <div className='flex items-end'>
           <div className='mr-10 mb-10 z-15'>
-            <InfoModal></InfoModal>
+            <InfoModal modalIsOpen={modalIsOpen} setIsOpen={setIsOpen} />
           </div>
         </div>
       </div>
