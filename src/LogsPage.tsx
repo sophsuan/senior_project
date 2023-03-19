@@ -247,11 +247,11 @@ export function LogsPage(props: LogsProps) {
                         }}
                         className={classNames(
                           hasLog(day) === 0 &&
-                            "bg-green text-white font-semibold",
+                            "bg-btn-green text-white font-semibold hover:bg-btn-green-dark",
                           hasLog(day) === 1 &&
-                            "bg-yellow text-white font-semibold",
+                            "bg-btn-yellow text-white font-semibold hover:bg-btn-yellow-dark",
                           hasLog(day) === 2 &&
-                            "bg-red text-white font-semibold",
+                            "bg-btn-red text-white font-semibold hover:bg-btn-red-dark",
                           isEqual(day, selectedDay) && !isToday(day),
                           isToday(day) &&
                             "outline outline-4 outline-secondary-bg",

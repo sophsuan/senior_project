@@ -19,23 +19,25 @@ module.exports = {
       "secondary-bg": "#F9AE91",
       white: colors.white,
       black: colors.black,
-      red: {
-        DEFAULT: "#DF7E74",
-        dark: "#BA6A62"
-      },
       blue: colors.blue,
       slate: colors.slate,
       stone: colors.stone,
-      green: {
-        DEFAULT: "#8DC692",
-        dark: "#70A175"
+      green: colors.green,
+      yellow: colors.yellow,
+      gray: colors.gray,
+      "logs-green": "#8DC692",
+      "btn-red": {
+        DEFAULT: "#DF7E74",
+        dark: "#BA6A62"
       },
-      yellow: {
+      "btn-yellow": {
         DEFAULT: "#F5BF6D",
         dark: "#D39A42"
       },
-      gray: colors.gray,
-      "logs-green": "#8DC692"
+      "btn-green": {
+        DEFAULT: "#8DC692",
+        dark: "#70A175"
+      }
     }
   },
   plugins: []
