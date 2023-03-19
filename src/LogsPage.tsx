@@ -140,7 +140,7 @@ export function LogsPage(props: LogsProps) {
       className='flex place-content-center bg-secondary-bg rounded-full flex flex-col justify-around items-center focus:outline-none'
       tabIndex={0}
     >
-      <div className='bg-white p-2 rounded-3xl flex place-content-center mt-[5%] mb-[5%]'>
+      <div className='bg-white p-2 rounded-3xl flex place-content-center mt-[5%]'>
         {isDayView ? (
           <div className='bg-yellow-100 rounded-3xl border-2 border-black p-2'>
             <div className='bg-yellow-100 rounded-3xl border border-1 border-black h-fit p-4'>
@@ -254,7 +254,7 @@ export function LogsPage(props: LogsProps) {
                             "bg-btn-red text-white font-semibold hover:bg-btn-red-dark",
                           isEqual(day, selectedDay) && !isToday(day),
                           isToday(day) &&
-                            "outline outline-4 outline-secondary-bg",
+                            "outline outline-4 outline-secondary-bg hover:bg-gray-200",
                           !isEqual(day, selectedDay) &&
                             hasLog(day) === -1 &&
                             "hover:bg-gray-200",
@@ -273,7 +273,21 @@ export function LogsPage(props: LogsProps) {
           </div>
         )}
       </div>
-      <div className='hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4'></div>
+      <p className='text-white font-bold text-lg p-4'>legend:</p>
+      <div className='hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4 text-white font-semibold text-lg'>
+        <div className='aspect-square h-20 bg-btn-green rounded-full border-2 border-white text-center pt-3 mb-8'>
+          <p>good</p>
+          <p>day</p>
+        </div>
+        <div className='aspect-square h-20 bg-btn-yellow rounded-full border-2 border-white text-center pt-3 mb-8'>
+          <p>okay</p>
+          <p>day</p>
+        </div>
+        <div className='aspect-square h-20 bg-btn-red rounded-full border-2 border-white text-center pt-3 mb-8'>
+          <p>bad</p>
+          <p>day</p>
+        </div>
+      </div>
     </div>
   );
 }
