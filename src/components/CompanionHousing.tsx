@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useContext,
   useRef,
-  forwardRef
+  forwardRef,
 } from "react";
 import ProgressBar from "./ProgressBar";
 import Dino from "./Dino";
@@ -47,14 +47,14 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     "dino: what are some things you like about yourself?",
     "dino: what are some things that always make you smile?",
     "dino: what usually cheers you up when you're down?",
-    "dino: what are some things you're doing well right now?"
+    "dino: what are some things you're doing well right now?",
   ];
   const [promptIdx, setPromptIdx] = useState(Math.floor(Math.random() * 6));
   const [progress, setProgress] = useState(0);
   const [level, setLevel] = useState(0);
   const [progressCSS, setProgressCSS] = useState("");
   const [response, setResponse] = useState("");
-  const [writtenPrompt, setWrittenPrompt]= useState("");
+  const [writtenPrompt, setWrittenPrompt] = useState("");
 
   const { clientId } = useContext(userContext);
 
@@ -80,13 +80,13 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   });
 
   useEffect(() => {
-    if (dialogueStage !== 2) {
+    if (dialogueStage === 1) {
       setPromptIdx(Math.floor(Math.random() * 6));
       setWrittenPrompt(promptsList[promptIdx].slice(6));
     }
 
-    if (dialogueStage == 3) {
-      localStorage.setItem("dialogueStage", ""+dialogueStage);
+    if (dialogueStage === 3) {
+      localStorage.setItem("dialogueStage", "" + dialogueStage);
     }
 
     setProgress(Math.trunc((props.experience % 10) * 10));
@@ -95,12 +95,12 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   }, [dialogueStage, progress, progressCSS, props.experience]);
 
   useEffect(() => {
-    localStorage.setItem("countdown", ""+countdown);
+    localStorage.setItem("countdown", "" + countdown);
     if (countdown <= 1999) {
       setDialogueStage(0);
     }
   }, [countdown]);
-  
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
@@ -131,38 +131,40 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     var month = date.getMonth();
     var day = date.getDate();
     var year = date.getFullYear();
-    var date = new Date(year, month, day);
+    date = new Date(year, month, day);
 
+    /*
     const newPrompt = {
       prompt: prompt,
       date: date
-    };
+    };*/
     await fetch("http://localhost:3001/api/log", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         userId: clientId,
         date: date,
         prompt: writtenPrompt,
         response: response,
-        mood: selectedID
-      })
-    }).catch(err => {
+        mood: selectedID,
+      }),
+    }).catch((err) => {
       console.log(err);
-        console.log(
-          "body here: " +
-            JSON.stringify({
-              userId: clientId,
-              date: date,
-              prompt: writtenPrompt,
-              response: response,
-              mood: selectedID,
-            })
-        );
-      });
+      console.log(
+        "body here: " +
+          JSON.stringify({
+            userId: clientId,
+            date: date,
+            prompt: writtenPrompt,
+            response: response,
+            mood: selectedID,
+          })
+      );
+    });
 
+    /*
     await fetch("http://localhost:3001/api/prompt", {
       method: "POST",
       headers: {
@@ -172,20 +174,21 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     }).catch(err => {
       console.log(err);
     });
+    */
 
     await fetch(
       "http://localhost:3001/api/user/exp?" +
         new URLSearchParams({
           userId: String(clientId),
-          experience: String(calculateExp())
+          experience: String(calculateExp()),
         }),
       {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
-    ).catch(err => console.log(err));
+    ).catch((err) => console.log(err));
 
     setDialogueStage(3);
     setPromptAsked(false);
@@ -199,10 +202,10 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   };
 
   const handleClickUp = () => {
-    if (dialogueStage === 0) setSelectedID(id => Math.max(0, id - 1));
+    if (dialogueStage === 0) setSelectedID((id) => Math.max(0, id - 1));
   };
   const handleClickDown = () => {
-    if (dialogueStage === 0) setSelectedID(id => Math.min(2, id + 1));
+    if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
   };
   const handleClickConfirm = () => {
     if (dialogueStage !== 2) {
@@ -219,11 +222,11 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     console.log(event.code);
     if (event.code === "ArrowUp") {
-      if (dialogueStage === 0) setSelectedID(id => Math.max(0, id - 1));
+      if (dialogueStage === 0) setSelectedID((id) => Math.max(0, id - 1));
       setPressedEffectUp(true);
     }
     if (event.code === "ArrowDown") {
-      if (dialogueStage === 0) setSelectedID(id => Math.min(2, id + 1));
+      if (dialogueStage === 0) setSelectedID((id) => Math.min(2, id + 1));
       setPressedEffectDown(true);
     }
     if (event.code === "Enter" && !event.shiftKey) {
@@ -258,13 +261,13 @@ const CompanionHousing = forwardRef(function CompanionHousing(
 
   return (
     <div
-      className='rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center focus:outline-none'
+      className="rounded-[100px] xl:rounded-full bg-secondary-bg flex flex-col justify-around items-center focus:outline-none"
       tabIndex={0}
       onKeyDown={keyDownHandler}
       onKeyUp={keyUpHandler}
       ref={ref}
     >
-      <div className='aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl'>
+      <div className="aspect-square box-content justify-end rounded-3xl bg-white flex flex-col m-10 shadow-inner max-w-xl">
         {/* inside the screen*/}
         <ProgressBar
           progressCSS={progressCSS}
@@ -272,7 +275,7 @@ const CompanionHousing = forwardRef(function CompanionHousing(
           promptAsked={promptAsked}
         />
         <Dino promptAsked={promptAsked} level={level} />
-        <div className='p-5'>
+        <div className="p-5">
           <Textbox
             prompt={
               dialogueStage === 0
@@ -297,32 +300,35 @@ const CompanionHousing = forwardRef(function CompanionHousing(
           />
         </div>
       </div>
-      <div className='hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4'>
+      <div className="hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4">
         {/* the buttons */}
         <button
           onClick={handleClickUp}
-          className={`${pressedEffectUp &&
-            "shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          className={`${
+            pressedEffectUp && "shadow-none bg-red-200 pt-1 "
+          } aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
         >
-          <img src={UpIcon} alt='up' className='object-contain h-12 mb-2 p-1' />
+          <img src={UpIcon} alt="up" className="object-contain h-12 mb-2 p-1" />
         </button>
         <button
           onClick={handleClickConfirm}
-          className={`${pressedEffectConfirm &&
-            "shadow-none bg-red-200 pt-1 "} aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          className={`${
+            pressedEffectConfirm && "shadow-none bg-red-200 pt-1 "
+          } aspect-square h-40 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
         >
-          <img src={HeartIcon} alt='heart' className='object-contain h-18' />
+          <img src={HeartIcon} alt="heart" className="object-contain h-18" />
         </button>
 
         <button
           onClick={handleClickDown}
-          className={`${pressedEffectDown &&
-            "shadow-none bg-red-200 pt-1 "} aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
+          className={`${
+            pressedEffectDown && "shadow-none bg-red-200 pt-1 "
+          } aspect-square h-28 bg-white rounded-full flex justify-center items-center shadow-lg hover:bg-red-200 active:shadow-none active:pt-1`}
         >
           <img
             src={DownIcon}
-            alt='down'
-            className='object-contain h-12 mt-2 p-1'
+            alt="down"
+            className="object-contain h-12 mt-2 p-1"
           />
         </button>
       </div>
