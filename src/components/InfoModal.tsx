@@ -88,6 +88,11 @@ function InfoModal({
           home page! Or, view some helpful mental health resources and more from
           the sidebar to the left!
           <br />
+          <br />
+          <p className='italic'>
+            Disclaimer: Your responses are confidential to other users and we
+            will not use your data for advertising.
+          </p>
         </div>
       </Modal>
     </div>
