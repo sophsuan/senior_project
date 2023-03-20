@@ -16,8 +16,10 @@ router.get("/", async (req, res) => {
 // get logs by name
 router.get("/findUser", async (req, res) => {
   const userId = req.query.userId;
+  const date = req.query.date;
   const logs = await Logs.find({
       userId: userId,
+      date: date,
   });
   res.send(logs);
   return;

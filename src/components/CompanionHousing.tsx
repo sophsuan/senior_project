@@ -34,7 +34,7 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   props: CompanionHousingProps,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
-  // const ref = useRef<HTMLDivElement>(null);
+
   const [promptAsked, setPromptAsked] = useState(false);
   const [selectedID, setSelectedID] = useState(0);
   const [pressedEffectUp, setPressedEffectUp] = useState(false);
@@ -67,49 +67,46 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     }
   });
 
-  const [countdown, setCountdown] = useState(() => {
-    const storedCountdown = localStorage.getItem("countdown");
-    if (storedCountdown) {
-      return Number(storedCountdown);
-    } else {
-      const now = new Date();
-      const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0);
-      return midnight.getTime() - now.getTime();
-    }
-  });
-
   useEffect(() => {
     if (dialogueStage === 1) {
-      setPromptIdx(Math.floor(Math.random() * 6));
       setWrittenPrompt(promptsList[promptIdx].slice(6));
     }
 
-    if (dialogueStage === 3) {
-      localStorage.setItem("dialogueStage", "" + dialogueStage);
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    var datestring = mm + '-' + dd + '-' + yyyy;
+
+    var returnedLogs = [];
+    try {
+      fetch(
+        "http://localhost:3001/api/log/findUser?" +
+          new URLSearchParams({ userId: clientId, date: datestring}),
+        {
+          method: "GET",
+          cache: "no-cache",
+        }
+      ).then(response => {
+        return response.json();
+      }).then(jsonResponse => {        
+        if (localStorage.getItem("dialogueStage") === "3") {
+          if (jsonResponse.length === 0) {
+            // localStorage.setItem("dialogueStage", "0");
+            // setDialogueStage(0);
+          }
+        }
+      });
+      
+    } catch (error) {
+      console.log(error);
     }
 
     setProgress(Math.trunc((props.experience % 10) * 10));
     setProgressCSS(String(progress));
     setLevel(Math.trunc(props.experience / 10));
   }, [dialogueStage, progress, progressCSS, props.experience]);
-
-  useEffect(() => {
-    localStorage.setItem("countdown", "" + countdown);
-    if (countdown <= 1999) {
-      setDialogueStage(0);
-    }
-  }, [countdown]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date();
-      const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0);
-      setCountdown(midnight.getTime() - now.getTime());
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, []);
 
   const calculateExp = () => {
     switch (level) {
@@ -191,8 +188,8 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     ).catch((err) => console.log(err));
 
     setDialogueStage(3);
+    localStorage.setItem("dialogueStage", "3");
     setPromptAsked(false);
-
     props.setExperience(calculateExp());
   };
 
@@ -210,6 +207,9 @@ const CompanionHousing = forwardRef(function CompanionHousing(
   const handleClickConfirm = () => {
     if (dialogueStage !== 2) {
       setDialogueStage(dialogueStage + 1);
+      if (dialogueStage + 1 === 3) {
+        localStorage.setItem("dialogueStage",  "3");
+      }
     }
     if (dialogueStage === 1) {
       setPromptAsked(true);
@@ -233,6 +233,9 @@ const CompanionHousing = forwardRef(function CompanionHousing(
       // try catch for adding new mood
       if (dialogueStage < 2) {
         setDialogueStage(dialogueStage + 1);
+        if (dialogueStage + 1 === 3) {
+          localStorage.setItem("dialogueStage",  "3");
+        }
         if (dialogueStage === 1) {
           setPromptAsked(true);
         }
