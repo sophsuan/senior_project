@@ -82,7 +82,7 @@ const CompanionHousing = forwardRef(function CompanionHousing(
     var returnedLogs = [];
     try {
       fetch(
-        "http://localhost:3001/api/log/findUser?" +
+        "http://localhost:3001/api/log/findUserDate?" +
           new URLSearchParams({ userId: clientId, date: datestring}),
         {
           method: "GET",
