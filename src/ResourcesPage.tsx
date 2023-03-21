@@ -65,6 +65,9 @@ export const ResourcesPage = () => {
               >
                 https://www.cdc.gov/mentalhealth/tools-resources/individuals/index.htm
               </a>
+              <br /><br /><br /><br />
+              <p className="text-blue-600">Disclaimer:</p>
+              <p>This is not a complete list of resources, rather just a good place to get started, and not a substitute for professional advice. We encourage you to seek professional and/or medical help if you require it.</p>
             </ul>
           </div>
         </div>
