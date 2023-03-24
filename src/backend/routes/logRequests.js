@@ -23,7 +23,7 @@ router.get("/findUser", async (req, res) => {
   return;
 });
 
-// get logs by name
+// get logs by name and by date
 router.get("/findUserDate", async (req, res) => {
   const userId = req.query.userId;
   const date = req.query.date;
