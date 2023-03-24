@@ -67,21 +67,7 @@ export function LogsPage(props: LogsProps) {
   let [selectedDay, setSelectedDay] = useState(today);
   let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
   let firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-  var DinoPfp;
   const level = Math.trunc(props.experience / 10);
-  if (level === 0) {
-    DinoPfp = Stage0;
-  } else if (level === 1) {
-    DinoPfp = Stage1;
-  } else if (level === 2) {
-    DinoPfp = Stage2;
-  } else if (level === 3) {
-    DinoPfp = Stage3;
-  } else if (level === 4) {
-    DinoPfp = Stage4;
-  } else {
-    DinoPfp = Stage5;
-  }
 
   let days = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -135,143 +121,201 @@ export function LogsPage(props: LogsProps) {
     setIsDayView(false);
   }
 
+  function DayView({ isDayView }: { isDayView: boolean }) {
+    var DinoPfp;
+
+    if (level === 0) {
+      DinoPfp = Stage0;
+    } else if (level === 1) {
+      DinoPfp = Stage1;
+    } else if (level === 2) {
+      DinoPfp = Stage2;
+    } else if (level === 3) {
+      DinoPfp = Stage3;
+    } else if (level === 4) {
+      DinoPfp = Stage4;
+    } else {
+      DinoPfp = Stage5;
+    }
+
+    if (isDayView && findPrompt() !== "") {
+      return (
+        <div className='bg-yellow-100 rounded-3xl border-2 border-black p-2'>
+          <div className='bg-yellow-100 rounded-3xl border border-1 border-black h-fit p-4'>
+            <div className='flex justify-end'>
+              <button
+                type='button'
+                className='rounded-md sm border border-solid border-1 border-black w-7 h-7 m-2 flex place-content-center'
+                onClick={handleBack}
+              >
+                <XIcon className='w-6 h-6' aria-hidden='true' />
+              </button>
+            </div>
+            <div className='flex flex-row'>
+              <div className='flex-none hidden lg:block box-border rounded-lg bg-white h-24 w-24 border-solid border-2 border-black mb-2'>
+                <img src={DinoPfp} alt='dino pic' className='rounded-lg' />
+              </div>
+              <p className='flex inline items-start font-semibold text-black text-base p-1 pl-6 text-inherit max-w-xl'>
+                {findPrompt()}
+              </p>
+            </div>
+            <textarea
+              rows={9}
+              placeholder='type response here'
+              className='p-2.5 text-base rounded-lg text-inherit resize-none w-full border-solid border-2 border-black'
+              value={findLog()}
+              readOnly={true}
+            ></textarea>
+            <div className='flex flex-row justify-around pt-2'>
+              <button
+                type='button'
+                className='rounded-md w-20 m-2 flex place-content-center'
+                onClick={previousDay}
+              >
+                <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
+              </button>
+              <div className='font-mono text-lg font-bold pt-2'>
+                {format(selectedDay, "MMM-dd-yyyy").toString()}
+              </div>
+              <button
+                type='button'
+                className='rounded-md h-15 w-20 m-2 flex place-content-center'
+                onClick={nextDay}
+              >
+                <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (isDayView && findPrompt() === "") {
+      return (
+        <div className='bg-yellow-100 rounded-3xl border-2 border-black p-2'>
+          <div className='bg-yellow-100 rounded-3xl border border-1 border-black h-fit p-4'>
+            <div className='flex justify-end'>
+              <button
+                type='button'
+                className='rounded-md sm border border-solid border-1 border-black w-7 h-7 m-2 flex place-content-center'
+                onClick={handleBack}
+              >
+                <XIcon className='w-6 h-6' aria-hidden='true' />
+              </button>
+            </div>
+            <div className='flex flex-row justify-center'>
+              <p className='flex inline items-start font-semibold text-center text-black text-base text-inherit max-w-xl pt-40 pb-40 pl-4 pr-4'>
+                Looks like there isn't an entry for this day!
+              </p>
+            </div>
+            <div className='flex flex-row justify-around pt-2'>
+              <button
+                type='button'
+                className='rounded-md w-20 m-2 flex place-content-center'
+                onClick={previousDay}
+              >
+                <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
+              </button>
+              <div className='font-mono text-lg font-bold pt-2'>
+                {format(selectedDay, "MMM-dd-yyyy").toString()}
+              </div>
+              <button
+                type='button'
+                className='rounded-md h-15 w-20 m-2 flex place-content-center'
+                onClick={nextDay}
+              >
+                <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className='aspect-square box-content rounded-3xl flex flex-col max-w-fit max-h-fit p-3 pt-4 bg-main-bg'>
+          <div className='flex items-center'>
+            <button
+              type='button'
+              onClick={previousMonth}
+              className='-my-1.5 flex flex-none items-center justify-center p-1.5 text-white hover:text-gray-500'
+            >
+              <span className='sr-only'>Previous month</span>
+              <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
+            </button>
+            <h2 className='flex-auto text-center font-semibold text-white pb-4'>
+              {format(firstDayCurrentMonth, "MMMM yyyy")}
+            </h2>
+
+            <button
+              onClick={nextMonth}
+              type='button'
+              className='-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-white hover:text-gray-500'
+            >
+              <span className='sr-only'>Next month</span>
+              <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
+            </button>
+          </div>
+          <div className='rounded-3xl max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-10 font-mono font-bold bg-white'>
+            <div className='md:pr-0 flex flex-col mr-0 justify-center pb-6'>
+              <div className='grid grid-cols-7 gap-x-3 mt-10 text-md leading-6 text-center text-main-bg'>
+                <div>sun</div>
+                <div>mon</div>
+                <div>tue</div>
+                <div>wed</div>
+                <div>thu</div>
+                <div>fri</div>
+                <div>sat</div>
+              </div>
+              <div className='grid grid-cols-7 mt-2 text-lg'>
+                {days.map((day, dayIdx) => (
+                  <div
+                    key={day.toString()}
+                    className={classNames(
+                      dayIdx === 0 && colStartClasses[getDay(day)],
+                      "py-1.5 px-1.5 "
+                    )}
+                  >
+                    <button
+                      type='button'
+                      onClick={() => {
+                        setSelectedDay(day);
+                        handleClick();
+                      }}
+                      className={classNames(
+                        hasLog(day) === 0 &&
+                          "bg-btn-green text-white font-semibold hover:bg-btn-green-dark",
+                        hasLog(day) === 1 &&
+                          "bg-btn-yellow text-white font-semibold hover:bg-btn-yellow-dark",
+                        hasLog(day) === 2 &&
+                          "bg-btn-red text-white font-semibold hover:bg-btn-red-dark",
+                        isEqual(day, selectedDay) && !isToday(day),
+                        isToday(day) &&
+                          "outline outline-4 outline-secondary-bg hover:bg-gray-200",
+                        !isEqual(day, selectedDay) &&
+                          hasLog(day) === -1 &&
+                          "hover:bg-gray-200",
+                        "mx-auto flex h-12 w-12 items-center justify-center rounded-full"
+                      )}
+                    >
+                      <time dateTime={format(day, "yyyy-MM-dd")}>
+                        {format(day, "d")}
+                      </time>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   return (
     <div
       className='flex place-content-center bg-secondary-bg rounded-full flex flex-col justify-around items-center focus:outline-none'
       tabIndex={0}
     >
       <div className='bg-white p-2 rounded-3xl flex place-content-center mt-[5%]'>
-        {isDayView ? (
-          <div className='bg-yellow-100 rounded-3xl border-2 border-black p-2'>
-            <div className='bg-yellow-100 rounded-3xl border border-1 border-black h-fit p-4'>
-              <div className='flex justify-end'>
-                <button
-                  type='button'
-                  className='rounded-md sm border border-solid border-1 border-black w-7 h-7 m-2 flex place-content-center'
-                  onClick={handleBack}
-                >
-                  <XIcon className='w-6 h-6' aria-hidden='true' />
-                </button>
-              </div>
-              <div className='flex flex-row'>
-                <div className='flex-none hidden lg:block box-border rounded-lg bg-white h-24 w-24 border-solid border-2 border-black mb-2'>
-                  <img src={DinoPfp} alt='dino pic' className='rounded-lg' />
-                </div>
-                <p className='flex inline items-start font-semibold text-black text-base p-1 pl-6 text-inherit max-w-[70%]'>
-                  {findPrompt()}
-                </p>
-              </div>
-              <textarea
-                rows={9}
-                placeholder='type response here'
-                className='p-2.5 text-base rounded-lg text-inherit resize-none w-full border-solid border-2 border-black'
-                value={findLog()}
-                readOnly={true}
-              ></textarea>
-              <div className='flex flex-row justify-around pt-2'>
-                <button
-                  type='button'
-                  className='rounded-md w-20 m-2 flex place-content-center'
-                  onClick={previousDay}
-                >
-                  <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
-                </button>
-                <div className='font-mono text-lg font-bold pt-2'>
-                  {format(selectedDay, "MMM-dd-yyyy").toString()}
-                </div>
-                <button
-                  type='button'
-                  className='rounded-md h-15 w-20 m-2 flex place-content-center'
-                  onClick={nextDay}
-                >
-                  <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className='aspect-square box-content rounded-3xl flex flex-col max-w-fit max-h-fit p-3 pt-4 bg-main-bg'>
-            <div className='flex items-center'>
-              <button
-                type='button'
-                onClick={previousMonth}
-                className='-my-1.5 flex flex-none items-center justify-center p-1.5 text-white hover:text-gray-500'
-              >
-                <span className='sr-only'>Previous month</span>
-                <ChevronLeftIcon className='w-5 h-5' aria-hidden='true' />
-              </button>
-              <h2 className='flex-auto text-center font-semibold text-white pb-4'>
-                {format(firstDayCurrentMonth, "MMMM yyyy")}
-              </h2>
-
-              <button
-                onClick={nextMonth}
-                type='button'
-                className='-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-white hover:text-gray-500'
-              >
-                <span className='sr-only'>Next month</span>
-                <ChevronRightIcon className='w-5 h-5' aria-hidden='true' />
-              </button>
-            </div>
-            <div className='rounded-3xl max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-10 font-mono font-bold bg-white'>
-              <div className='md:pr-0 flex flex-col mr-0 justify-center pb-6'>
-                <div className='grid grid-cols-7 gap-x-3 mt-10 text-md leading-6 text-center text-main-bg'>
-                  <div>sun</div>
-                  <div>mon</div>
-                  <div>tue</div>
-                  <div>wed</div>
-                  <div>thu</div>
-                  <div>fri</div>
-                  <div>sat</div>
-                </div>
-                <div className='grid grid-cols-7 mt-2 text-lg'>
-                  {days.map((day, dayIdx) => (
-                    <div
-                      key={day.toString()}
-                      className={classNames(
-                        dayIdx === 0 && colStartClasses[getDay(day)],
-                        "py-1.5 px-1.5 "
-                      )}
-                    >
-                      {/*
-                - if hasLog && log.mood=="0" : bg-red, text-white
-                - if hasLog && log.mood="1" : bg-yellow, text-white
-                - if hasLog && log.mood="2" : bg-green, text-white
-                */}
-
-                      <button
-                        type='button'
-                        onClick={() => {
-                          setSelectedDay(day);
-                          handleClick();
-                        }}
-                        className={classNames(
-                          hasLog(day) === 0 &&
-                            "bg-btn-green text-white font-semibold hover:bg-btn-green-dark",
-                          hasLog(day) === 1 &&
-                            "bg-btn-yellow text-white font-semibold hover:bg-btn-yellow-dark",
-                          hasLog(day) === 2 &&
-                            "bg-btn-red text-white font-semibold hover:bg-btn-red-dark",
-                          isEqual(day, selectedDay) && !isToday(day),
-                          isToday(day) &&
-                            "outline outline-4 outline-secondary-bg hover:bg-gray-200",
-                          !isEqual(day, selectedDay) &&
-                            hasLog(day) === -1 &&
-                            "hover:bg-gray-200",
-                          "mx-auto flex h-12 w-12 items-center justify-center rounded-full"
-                        )}
-                      >
-                        <time dateTime={format(day, "yyyy-MM-dd")}>
-                          {format(day, "d")}
-                        </time>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        <DayView isDayView={isDayView} />
       </div>
       <p className='text-white font-bold text-lg p-4'>legend:</p>
       <div className='hidden md:flex flex-row w-3/4 justify-center pb-5 space-x-4 text-white font-semibold text-lg'>
